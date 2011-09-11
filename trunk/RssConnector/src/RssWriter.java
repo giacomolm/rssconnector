@@ -38,14 +38,16 @@ public class RssWriter {
 			urlString+="link="+post.getLink()+"&";
 			urlString+="author="+this.author+"&";
 			urlString+="source="+this.alias;
-			Iterator ic = post.getCategory().iterator();
-			if(ic.hasNext()){
-				String category = (String) ic.next();
-				urlString+="&category="+category;
-				while(ic.hasNext()){
-					category = (String) ic.next();
-					urlString+=","+category;
-				} 
+			if(post.getCategory()!=null){
+				Iterator ic = post.getCategory().iterator();
+				if(ic.hasNext()){
+					String category = (String) ic.next();
+					urlString+="&category="+category;
+					while(ic.hasNext()){
+						category = (String) ic.next();
+						urlString+=","+category;
+					} 
+				}
 			}
 			if(post.getEnclosure()!=null)
 				urlString+="&enclosure="+post.getEnclosure();
@@ -105,7 +107,7 @@ public class RssWriter {
 		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",null,null,"alias",new Date());
 		ArrayList<Post> posts = new ArrayList<Post>();
 		posts.add(p);
-		writer.writePosts(posts);
+		System.out.println("Send Successful: "+writer.writePosts(posts));
 	}
 
 	public void setBoardAddress(String boardAddress) {
