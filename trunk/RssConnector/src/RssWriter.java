@@ -12,6 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 public class RssWriter {
@@ -100,8 +101,11 @@ public class RssWriter {
 	}
 
 	public static void main(String[] args) {
-		/*RssWriter writer = new RssWriter();
-		String result = writer.writePost();*/
+		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard","atlantis","Vinny");
+		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",null,null,"alias",new Date());
+		ArrayList<Post> posts = new ArrayList<Post>();
+		posts.add(p);
+		writer.writePosts(posts);
 	}
 
 	public void setBoardAddress(String boardAddress) {
