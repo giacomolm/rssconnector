@@ -3,6 +3,21 @@ import java.util.Date;
 
 
 public class Post {
+	public Post(long id, String title, String link, String description,
+			String author, ArrayList<String> category, String enclosure,
+			String source, Date pubDate) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.link = link;
+		this.description = description;
+		this.author = author;
+		this.category = category;
+		this.enclosure = enclosure;
+		this.source = source;
+		this.pubDate = pubDate;
+	}
+
 	private long id;
 	private String title;
 	private String link;
