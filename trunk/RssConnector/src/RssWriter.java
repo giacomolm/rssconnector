@@ -11,12 +11,67 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RssWriter {
 	
-	/*public static String writePost(Post posts){
-		
-	}*/
+	private String boardAddress;
+	private String alias;
+	private String author;
+	
+	public RssWriter(String boardAddress, String alias, String author){
+		this.boardAddress = boardAddress;
+		this.alias = alias;
+		this.author = author;
+	}
+	
+	public boolean writePosts(ArrayList<Post> posts){
+		boolean response = true;
+		for(Iterator it = posts.iterator(); it.hasNext();){
+			Post post = (Post) it.next();
+			String urlString = boardAddress+"?";
+			urlString+="action=NEWPOST&";
+			urlString+="title="+post.getTitle()+"&";
+			urlString+="description="+post.getDescription()+"&";
+			urlString+="link="+post.getLink()+"&";
+			urlString+="author="+this.author+"&";
+			urlString+="source="+this.alias;
+			Iterator ic = post.getCategory().iterator();
+			if(ic.hasNext()){
+				String category = (String) ic.next();
+				urlString+="&category="+category;
+				while(ic.hasNext()){
+					category = (String) ic.next();
+					urlString+=","+category;
+				} 
+			}
+			if(post.getEnclosure()!=null)
+				urlString+="&enclosure="+post.getEnclosure();
+			
+			System.out.println("Sending URL "+urlString+" ...");
+			
+			try {
+				URL url = new URL(urlString);
+				URLConnection connection = url.openConnection();
+				BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				StringBuffer sb = new StringBuffer();
+				String line;
+				while((line = bf.readLine())!=null){
+					sb.append(line);
+				}
+				bf.close();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				response = false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				response = false;
+			}
+			
+		}
+		return response;
+	}
 	
 	public String writePost(){
 		String response=null;
@@ -45,7 +100,31 @@ public class RssWriter {
 	}
 
 	public static void main(String[] args) {
-		RssWriter writer = new RssWriter();
-		String result = writer.writePost();
+		/*RssWriter writer = new RssWriter();
+		String result = writer.writePost();*/
+	}
+
+	public void setBoardAddress(String boardAddress) {
+		this.boardAddress = boardAddress;
+	}
+
+	public String getBoardAddress() {
+		return boardAddress;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAuthor() {
+		return author;
 	}
 }
