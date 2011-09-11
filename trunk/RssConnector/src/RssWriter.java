@@ -75,40 +75,6 @@ public class RssWriter {
 		}
 		return response;
 	}
-	
-	public String writePost(){
-		String response=null;
-		String urlString = "http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard?action=NEWPOST&title=151&description=descrizione_del_feed_151&link=http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/";
-		
-		try {
-			URL url = new URL(urlString);
-			URLConnection connection = url.openConnection();
-			BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			StringBuffer sb = new StringBuffer();
-			String line;
-			while((line = bf.readLine())!=null){
-				sb.append(line);
-			}
-			bf.close();
-			response = sb.toString();
-			
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return response;
-	}
-
-	public static void main(String[] args) {
-		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard","atlantis","Vinny");
-		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",null,null,"alias",new Date());
-		ArrayList<Post> posts = new ArrayList<Post>();
-		posts.add(p);
-		System.out.println("Send Successful: "+writer.writePosts(posts));
-	}
 
 	public void setBoardAddress(String boardAddress) {
 		this.boardAddress = boardAddress;
@@ -132,5 +98,13 @@ public class RssWriter {
 
 	public String getAuthor() {
 		return author;
+	}
+	
+	public static void main(String[] args) {
+		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard","atlantis","Vinny");
+		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",null,null,"alias",new Date());
+		ArrayList<Post> posts = new ArrayList<Post>();
+		posts.add(p);
+		System.out.println("Send Successful: "+writer.writePosts(posts));
 	}
 }
