@@ -1,0 +1,98 @@
+import java.util.ArrayList;
+import java.util.Date;
+
+
+public class Post {
+	private long id;
+	private String title;
+	private String link;
+	private String description;
+	private String author;
+	private ArrayList<String> category;
+	private String enclosure;
+	private String source;
+	private Date pubDate;
+	private ArrayList<Feedback> feedbacks;
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setCategory(ArrayList<String> category) {
+		this.category = category;
+	}
+
+	public ArrayList<String> getCategory() {
+		return category;
+	}
+
+	public void setEnclosure(String enclosure) {
+		this.enclosure = enclosure;
+	}
+
+	public String getEnclosure() {
+		return enclosure;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setPubDate(Date pubDate) {
+		this.pubDate = pubDate;
+	}
+
+	public Date getPubDate() {
+		return pubDate;
+	}
+
+	public void setFeedbacks(ArrayList<Feedback> feedbacks) {
+		this.feedbacks = feedbacks;
+	}
+
+	public ArrayList<Feedback> getFeedbacks() {
+		return feedbacks;
+	}
+	
+
+}
