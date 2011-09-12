@@ -27,11 +27,43 @@ public class RssWriter {
 		this.author = author;
 	}
 	
+	private boolean writeFeedback(Feedback feedback, long idPost){
+		boolean response=true;
+		String urlString = boardAddress+"feedbacks?";
+		urlString+="action=NEWCOMMENT&";
+		urlString+="FeedbackName="+idPost+"&";
+		urlString+="description="+feedback.getDescription()+"&";
+		urlString+="author="+feedback.getAuthor()+"&";
+		urlString+="title="+feedback.getTitle();
+		
+		System.out.println("Sending URL "+urlString+" ...");
+		
+		try {
+			URL url = new URL(urlString);
+			URLConnection connection = url.openConnection();
+			BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			StringBuffer sb = new StringBuffer();
+			String line;
+			while((line = bf.readLine())!=null){
+				sb.append(line);
+			}
+			bf.close();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			response = false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			response = false;
+		}
+		System.out.println("Send Successful: "+response);
+		return response;
+	}
+	
 	public boolean writePosts(ArrayList<Post> posts){
 		boolean response = true;
 		for(Iterator it = posts.iterator(); it.hasNext();){
 			Post post = (Post) it.next();
-			String urlString = boardAddress+"?";
+			String urlString = boardAddress+"postboard?";
 			urlString+="action=NEWPOST&";
 			urlString+="title="+post.getTitle()+"&";
 			urlString+="description="+post.getDescription()+"&";
@@ -71,6 +103,15 @@ public class RssWriter {
 				// TODO Auto-generated catch block
 				response = false;
 			}
+			System.out.println("Post Sending Successful: "+response);
+			//Now send feedback.
+			//Come prima cosa dobbiamo prelevare il feedback name del post appena scritto
+			//idPost = (new RssReader("bacheca di destinazione")).getFeedbackName(post); 
+			//Dopo di che scriviamo il feedback
+			for(Iterator itf = post.getFeedbacks().iterator(); itf.hasNext();){
+				Feedback feedback = (Feedback) itf.next();
+				//writeFeedback(feedback, idPost);
+			}
 			
 		}
 		return response;
@@ -101,10 +142,14 @@ public class RssWriter {
 	}
 	
 	public static void main(String[] args) {
-		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard","atlantis","Vinny");
-		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",null,null,"alias",new Date());
+		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","atlantis","vinny");
+		ArrayList<String> al = new ArrayList<String>();
+		al.add("red");
+		al.add("white");
+		al.add("green");
+		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",al,"http://www.yahoo.it","alias",new Date());
 		ArrayList<Post> posts = new ArrayList<Post>();
 		posts.add(p);
-		System.out.println("Send Successful: "+writer.writePosts(posts));
+		writer.writePosts(posts);
 	}
 }
