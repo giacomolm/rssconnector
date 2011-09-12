@@ -109,5 +109,10 @@ public class Post {
 		return feedbacks;
 	}
 	
+	public String toString(){
+		return "id="+this.id+", title="+this.title+", description="+this.description+
+				", autore="+this.author+", category=, enclosure="+this.enclosure+
+				", source="+this.source;
+	}
 
 }
