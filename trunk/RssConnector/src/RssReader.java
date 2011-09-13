@@ -59,7 +59,8 @@ public class RssReader {
         	String comp=it.next();
         	Iterator<String> itTag = tag.iterator();
         	while(itTag.hasNext()){
-        		if (comp.toLowerCase().equals(itTag.next().toLowerCase())){
+        		if ((comp.toLowerCase().equals(itTag.next().toLowerCase()))		||
+        				((comp.toLowerCase().indexOf(itTag.next().toLowerCase())))!=-1){
         			return true;
         		}
         	}
