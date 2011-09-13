@@ -162,7 +162,7 @@ public class RssReader {
 		}
 		Iterator<Post> it=list.iterator();
 		while(it.hasNext()){
-			System.out.println(it.next());
+			//System.out.println(it.next());
 		}
     }
 }
