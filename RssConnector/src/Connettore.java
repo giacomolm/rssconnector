@@ -151,6 +151,7 @@ public class Connettore {
 			res = false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Connessione Fallita");
 			res = false;
 		}
 		
@@ -160,7 +161,7 @@ public class Connettore {
 
 	public static void main(String[] args) {
 		
-		Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", null);
+		Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", new ArrayList<String>());
 		c.federate();
 	}
 }

@@ -82,14 +82,14 @@ public class RssReader {
         ArrayList<Post> allPost=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
-        	long id=getFeedbackName(i);   //L'id è sempre presente
+        	long id=getFeedbackName(i);   //L'id ï¿½ sempre presente
             String titolo="";
             String link="";
             String description="";
             ArrayList<String> categories=new ArrayList<String>();
             String enclosure="";
             String source="";
-            Date date=getPubDate(i);    //La data è sempre presente
+            Date date=getPubDate(i);    //La data ï¿½ sempre presente
             try{
             	titolo=i.getTitle().getText();
             }
