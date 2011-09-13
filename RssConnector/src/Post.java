@@ -3,6 +3,18 @@ import java.util.Date;
 
 
 public class Post {
+
+	private long id;
+	private String title;
+	private String link;
+	private String description;
+	private String author;
+	private ArrayList<String> category;
+	private String enclosure;
+	private String source;
+	private Date pubDate;
+	private ArrayList<Feedback> feedbacks;
+	
 	public Post(long id, String title, String link, String description,
 			String author, ArrayList<String> category, String enclosure,
 			String source, Date pubDate) {
@@ -17,17 +29,6 @@ public class Post {
 		this.source = source;
 		this.pubDate = pubDate;
 	}
-
-	private long id;
-	private String title;
-	private String link;
-	private String description;
-	private String author;
-	private ArrayList<String> category;
-	private String enclosure;
-	private String source;
-	private Date pubDate;
-	private ArrayList<Feedback> feedbacks;
 
 	public void setId(long id) {
 		this.id = id;

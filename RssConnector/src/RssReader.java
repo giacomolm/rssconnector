@@ -1,14 +1,12 @@
-import com.sun.cnpi.rss.elements.Channel;
-import com.sun.cnpi.rss.elements.Item;
-import com.sun.cnpi.rss.elements.Rss;
+import com.sun.cnpi.rss.elements.*;
 import com.sun.cnpi.rss.parser.RssParser;
 import com.sun.cnpi.rss.parser.RssParserException;
 import com.sun.cnpi.rss.parser.RssParserFactory;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -63,36 +61,76 @@ public class RssReader {
         Rss rss = parser.parse(new URL("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard?action=READ"));
         Item x = new Item();
         Channel c= rss.getChannel();
+        if (c.getItems()==null){
+        	System.out.println("Non ci sono Post");
+        	return new ArrayList<Post>();
+        }
         ArrayList<Item> items=new ArrayList<Item>(c.getItems());
         Iterator iter = items.iterator();
         ArrayList<Post> res=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
-        	Post p=new Post(getFeedbackName(i),i.getTitle().getText(),			//Controllare creazione post NullPointerException
-        			i.getLink().getText(),i.getDescription().getText(),
-        			getDcCreator(i),new ArrayList<String>(),i.getEnclosure().getText(),
-        			i.getSource().getText(),new Date());
+        	long id=getFeedbackName(i);   //L'id è sempre presente
+            String titolo="";
+            String link="";
+            String description="";
+            ArrayList<String> categories=new ArrayList<String>();
+            String enclosure="";
+            String source="";
+            Date date=getPubDate(i);    //La data è sempre presente
+            try{
+            	titolo=i.getTitle().getText();
+            }
+            catch (NullPointerException e){}
+            try{
+            	link=i.getLink().getText();
+            }
+            catch (NullPointerException e){}
+            try{
+            	description=i.getDescription().getText();
+            }
+            catch (NullPointerException e){}
+            try{
+            	categories=getCategories(i);
+            }
+            catch (NullPointerException e){}
+            try{
+            	enclosure=i.getEnclosure().getText();
+            }
+            catch (NullPointerException e){}
+            try{
+            	source=i.getSource().getText();
+            }
+            catch (NullPointerException e){}
+        	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
         	res.add(p);
         }
         return res;
         }
     
-    private String getDcCreator(Item item){
-    	String testo = item.getText();
-    	String res="";
-    	int i=49;
-    	char c;
-    	boolean finito=false;
-    	do{
-    		c=testo.charAt(i);
-    		i++;
-    		if (c!='\n')
-    			res+=c;
-    		else
-    			finito=true;
-    	}while ((!finito)&&(i<testo.length()));
-    	return res;
+    private ArrayList <String> getCategories(Item item){
+    	ArrayList <String> lista=new ArrayList<String>();
+    	Iterator <Category> it = item.getCategories().iterator();
+    	while (it.hasNext()){
+    		lista.add(it.next().getText());
+    	}
+    	return lista;
     }
+    
+    private Date getPubDate(Item item){
+    	String data=item.getPubDate().getText();
+    	SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+    	Date x=new Date();
+    	try {
+			x=new Date(sdf.parse(data).getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return x;
+    }
+    
+    
     
     private long getFeedbackName(Item x){
     	String guid =x.getGuid().getText();
@@ -101,20 +139,15 @@ public class RssReader {
     
     public static void main (String[] args){
     	RssReader x=new RssReader();
+    	ArrayList<Post> list=new ArrayList<Post>();
     	try {
-			ArrayList <Post> c=x.readPost();
-			Iterator <Post> it=c.iterator();
-			System.out.println(c.size());
-			while(it.hasNext()){
-				Post p=it.next();
-				System.out.println(p.toString());
-			}
+			list=x.readPost();
 		} catch (RssParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		Iterator<Post> it=list.iterator();
+		while(it.hasNext()){
+			System.out.println(it.next());
 		}
     }
 }
