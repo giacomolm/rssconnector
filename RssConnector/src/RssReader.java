@@ -15,11 +15,11 @@ import java.util.*;
 public class RssReader {
 
     private String boardAddress;
-    private String[] tag;
+    private ArrayList<String> tag;
     private Date timestamp;
 
     
-    public RssReader(String boardAddress, String[] tag, Date timestamp) {
+    public RssReader(String boardAddress, ArrayList<String> tag, Date timestamp) {
         this.boardAddress = boardAddress;
         this.tag = tag;
         this.timestamp = timestamp;
@@ -36,30 +36,41 @@ public class RssReader {
         this.boardAddress = boardAddress;
     }
 
-    public String[] getTag() {
+    public ArrayList<String> getTag() {
         return tag;
     }
 
-    public void setTag(String[] tag) {
+    public void setTag(ArrayList<String> tag) {
         this.tag = tag;
     }
 
-    private ArrayList readFeedbacks (long post){
+    public ArrayList readFeedbacks (long post){
          ArrayList feedbacks = new ArrayList();
          
          return feedbacks;
     }
     
     private boolean match(Post post){
-        boolean res = false;
+    	if (tag.isEmpty()){
+    		return true;
+    	}
+        Iterator<String> it=post.getCategory().iterator();
+        while(it.hasNext()){
+        	String comp=it.next();
+        	Iterator<String> itTag = tag.iterator();
+        	while(itTag.hasNext()){
+        		if (comp.toLowerCase().equals(itTag.next().toLowerCase())){
+        			return true;
+        		}
+        	}
+        }
         
-        return res;
+        return false;
     }
     
     public ArrayList<Post> readPost() throws RssParserException, IOException{     //manca la funzione match, per ricavare le categorie ed estrarre la data
         RssParser parser = RssParserFactory.createDefault();
         Rss rss = parser.parse(new URL("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard?action=READ"));
-        Item x = new Item();
         Channel c= rss.getChannel();
         if (c.getItems()==null){
         	System.out.println("Non ci sono Post");
@@ -67,7 +78,7 @@ public class RssReader {
         }
         ArrayList<Item> items=new ArrayList<Item>(c.getItems());
         Iterator iter = items.iterator();
-        ArrayList<Post> res=new ArrayList<Post>();
+        ArrayList<Post> allPost=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
         	long id=getFeedbackName(i);   //L'id è sempre presente
@@ -103,7 +114,13 @@ public class RssReader {
             }
             catch (NullPointerException e){}
         	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
-        	res.add(p);
+        	allPost.add(p);
+        }
+        Iterator<Post> it2 = allPost.iterator();
+        ArrayList<Post> res=new ArrayList<Post>();
+        while(it2.hasNext()){
+        	Post x=it2.next();
+        	if (match(x))	res.add(x);
         }
         return res;
         }
@@ -123,10 +140,7 @@ public class RssReader {
     	Date x=new Date();
     	try {
 			x=new Date(sdf.parse(data).getTime());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (ParseException e) {}
 		return x;
     }
     
