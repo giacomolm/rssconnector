@@ -71,7 +71,7 @@ public class RssReader {
     
     public ArrayList<Post> readPost() throws RssParserException, IOException{     //manca la funzione match, per ricavare le categorie ed estrarre la data
         RssParser parser = RssParserFactory.createDefault();
-        Rss rss = parser.parse(new URL("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard?action=READ"));
+        Rss rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
         Channel c= rss.getChannel();
         if (c.getItems()==null){
         	System.out.println("Non ci sono Post");

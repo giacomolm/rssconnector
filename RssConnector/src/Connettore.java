@@ -129,9 +129,10 @@ public class Connettore {
 					if(esito){
 					
 						//dobbiamo recuperare il feedbackname del post appena scritto
-						long idPost = getFeedbackName(post, r1);
+						long idPost = getFeedbackName(post, r2);
 						if(idPost!=0){
 							post.setId(idPost);
+							System.out.println(idPost);
 							ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
 							if(!feedbacks.isEmpty()){
 								/*Feedback feedback = trust(feedbacks);
@@ -143,8 +144,11 @@ public class Connettore {
 						}
 						else res = false;
 					}
-				}	
+				}
+				
 			}
+			//Aggiorna il timestamp su A
+			//fai la stessa cosa da b verso A
 			
 		} catch (RssParserException e) {
 			// TODO Auto-generated catch block
