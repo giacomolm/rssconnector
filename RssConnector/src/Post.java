@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+
+import com.sun.cnpi.rss.elements.Category;
 
 
 public class Post {
@@ -110,10 +113,24 @@ public class Post {
 		return feedbacks;
 	}
 	
+	public String printCategoriesToString(){
+		Iterator<String> it=this.category.iterator();
+		String str="";
+		boolean primo=true;
+		while(it.hasNext()){
+			if (primo){
+				str+=it.next();
+				primo=false;
+			}
+			else str+=", "+it.next();
+		}
+		return str;
+	}
+	
 	public String toString(){
 		return "id="+this.id+", title="+this.title+", description="+this.description+
-				", autore="+this.author+", category=, enclosure="+this.enclosure+
-				", source="+this.source;
+				", link="+this.link+", autore="+this.author+", category="+printCategoriesToString()+
+				", enclosure="+this.enclosure+", source="+this.source;
 	}
 
 }
