@@ -27,7 +27,7 @@ public class RssWriter {
 		this.author = author;
 	}
 	
-	private boolean writeFeedback(Feedback feedback, long idPost){
+	public boolean writeFeedback(Feedback feedback, long idPost){
 		boolean response=true;
 		String urlString = boardAddress+"feedbacks?";
 		urlString+="action=NEWCOMMENT&";
