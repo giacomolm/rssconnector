@@ -21,7 +21,6 @@ public class Post {
 	public Post(long id, String title, String link, String description,
 			String author, ArrayList<String> category, String enclosure,
 			String source, Date pubDate) {
-		super();
 		this.id = id;
 		this.title = title;
 		this.link = link;
@@ -31,6 +30,7 @@ public class Post {
 		this.enclosure = enclosure;
 		this.source = source;
 		this.pubDate = pubDate;
+		this.feedbacks=new ArrayList<Feedback>();
 	}
 
 	public void setId(long id) {
@@ -128,9 +128,16 @@ public class Post {
 	}
 	
 	public String toString(){
-		return "id="+this.id+", title="+this.title+", description="+this.description+
+		String x= "id="+this.id+", title="+this.title+", description="+this.description+
 				", link="+this.link+", autore="+this.author+", category="+printCategoriesToString()+
 				", enclosure="+this.enclosure+", source="+this.source;
+		Iterator <Feedback> it=feedbacks.iterator();
+		int i=1;
+		while (it.hasNext()){
+			x+="\n\tFeedback "+i+": "+it.next().toString();
+			i++;
+		}
+		return x;
 	}
 
 }
