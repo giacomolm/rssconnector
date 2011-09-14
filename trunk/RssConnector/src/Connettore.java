@@ -93,24 +93,17 @@ public class Connettore {
 		
 		long res = 0;
 		ArrayList<Post> posts;
-		try {
-			posts = r.readPost();
-			if(!posts.isEmpty()){
-				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-					Post p = (Post) it.next();
-					if(post.getCategory().equals(p.getCategory()) &&post.getDescription().equals(p.getDescription()) &&
-						post.getEnclosure().equals(p.getEnclosure()) &&	post.getLink().equals(p.getLink()) &&
-						post.getTitle().equals(p.getTitle()))
-						res = p.getId();
-				}
+		posts = r.readPost();
+		if(!posts.isEmpty()){
+			for(Iterator<Post> it = posts.iterator(); it.hasNext();){
+				Post p = (Post) it.next();
+				if(post.getCategory().equals(p.getCategory()) &&post.getDescription().equals(p.getDescription()) &&
+					post.getEnclosure().equals(p.getEnclosure()) &&	post.getLink().equals(p.getLink()) &&
+					post.getTitle().equals(p.getTitle()))
+					res = p.getId();
 			}
-		} catch (RssParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+
 		
 		return res;
 		
@@ -118,46 +111,39 @@ public class Connettore {
 	
 	public boolean federate(){
 		boolean res = true;
-		try {
-			ArrayList<Post> posts = r1.readPost();
+		ArrayList<Post> posts = r1.readPost();
+		System.out.println("Dimensione "+posts.size());
+		
+		Iterator it = posts.iterator();
+		while(it.hasNext()){
+			Post post = (Post) it.next();
+			System.out.println("Itera "+post.toString());
+			boolean esito = w1.writePost(post);
 			
-			if(!posts.isEmpty()){
-				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-					Post post = (Post) it.next();
-					boolean esito = w1.writePost(post);
-					
-					if(esito){
-					
-						//dobbiamo recuperare il feedbackname del post appena scritto
-						long idPost = getFeedbackName(post, r2);
-						if(idPost!=0){
-							post.setId(idPost);
-							System.out.println(idPost);
-							ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
-							if(!feedbacks.isEmpty()){
-								/*Feedback feedback = trust(feedbacks);
-								ArrayList<Feedback> al = new ArrayList<Feedback>();
-								al.add(feedback);
-								post.setFeedbacks(al);
-								w1.writeFeedback(feedback, idPost);*/
-							}
-						}
-						else res = false;
-					}
+			if(esito){
+			
+				//dobbiamo recuperare il feedbackname del post appena scritto
+				long idPost = getFeedbackName(post, r2);
+				if(idPost!=0){
+					post.setId(idPost);
+					System.out.println(idPost);
+					ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
+					/*if(!feedbacks.isEmpty()){
+						/*Feedback feedback = trust(feedbacks);
+						ArrayList<Feedback> al = new ArrayList<Feedback>();
+						al.add(feedback);
+						post.setFeedbacks(al);
+						w1.writeFeedback(feedback, idPost);
+					}*/
 				}
-				
+				else res = false;
 			}
-			//Aggiorna il timestamp su A
-			//fai la stessa cosa da b verso A
-			
-		} catch (RssParserException e) {
-			// TODO Auto-generated catch block
-			res = false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Connessione Fallita");
-			res = false;
 		}
+				
+			//Aggiorna il timestamp su A
+			
+			//fai la stessa cosa da b verso A
+
 		
 		return res;
 		
