@@ -9,10 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- *
- * @author Vincenzo Barrea, Alessio Felicioni
- */
 public class RssReader {
 
     private String boardAddress;
