@@ -224,6 +224,7 @@ public class RssReader {
         	Post x=it2.next();
         	if (match(x)&&timestamp.before(x.getPubDate()))	res.add(x);
         }
+        timestamp=new Date();
         return res;
         }
     
