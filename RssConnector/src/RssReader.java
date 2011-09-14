@@ -16,10 +16,12 @@ public class RssReader {
     private String boardAddress;
     private ArrayList<String> tag;
     private Date timestamp;
+    private String bannished; 
 
     
-    public RssReader(String boardAddress, ArrayList<String> tag, Date timestamp) {
-        this.boardAddress = boardAddress;													//indirizzo bacheca
+    public RssReader(String boardAddress, String bannished, ArrayList<String> tag, Date timestamp) {
+        this.boardAddress = boardAddress;	//indirizzo bacheca
+        this.bannished = bannished;			//autore bandito
         if (tag==null)																		//array di tag
         	this.tag=new ArrayList<String>();
         else
@@ -36,8 +38,9 @@ public class RssReader {
         }
     }
     
-    public RssReader(String boardAddress, Date timestamp) {
+    public RssReader(String boardAddress, String bannished, Date timestamp) {
         this.boardAddress = boardAddress;													//indirizzo bacheca
+        this.bannished = bannished;															//autore bandito
         this.tag=new ArrayList<String>();													//array_Post
         if (timestamp != null)
         	this.timestamp = timestamp;
@@ -51,8 +54,9 @@ public class RssReader {
         }
     }
     
-    public RssReader(String boardAddress, ArrayList<String> tag) {	
+    public RssReader(String boardAddress, String bannished, ArrayList<String> tag) {	
         this.boardAddress = boardAddress;													//indirizzo bacheca
+        this.bannished = bannished;															//autore bandito
         if (tag==null)																		//array di tag
         	this.tag=new ArrayList<String>();
         else
@@ -65,8 +69,9 @@ public class RssReader {
 		timestamp=x;
     }
     
-    public RssReader(String boardAddress) {
+    public RssReader(String boardAddress, String bannished) {
         this.boardAddress = boardAddress;   											//Indirizzo Bacheca
+        this.bannished = bannished;														//autore bandito
         tag=new ArrayList<String>();													//Array di tag vuoto
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
     	Date x=new Date();
@@ -182,6 +187,7 @@ public class RssReader {
         ArrayList<Post> allPost=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
+        	if (i.getText().indexOf(bannished)==-1) continue;
         	long id=getFeedbackName(i);   //id sempre presente
             String titolo="";
             String link="";
@@ -215,7 +221,6 @@ public class RssReader {
             }
             catch (NullPointerException e){}
         	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
-        	p.setFeedbacks(readFeedbacks(p.getId()));
         	allPost.add(p);
         }
         Iterator<Post> it2 = allPost.iterator();
@@ -247,15 +252,13 @@ public class RssReader {
 		return x;
     }
     
-    
-    
     private long getFeedbackName(Item x){
     	String guid =x.getGuid().getText();
     	return Long.valueOf(guid.substring(guid.indexOf('=')+1)).longValue();
     }
     
     public static void main (String[] args){
-    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/");
+    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","");
     	ArrayList<Post> list=new ArrayList<Post>();
     	list=x.readPost();
 		Iterator<Post> it=list.iterator();
