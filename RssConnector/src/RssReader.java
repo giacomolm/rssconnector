@@ -127,8 +127,9 @@ public class RssReader {
         	String comp=it.next();
         	Iterator<String> itTag = tag.iterator();
         	while(itTag.hasNext()){
-        		if ((comp.toLowerCase().equals(itTag.next().toLowerCase()))		||
-        				((comp.toLowerCase().indexOf(itTag.next().toLowerCase())))!=-1){
+        		String comp2=itTag.next();
+        		if ((comp.toLowerCase().equals(comp2.toLowerCase()))		||
+        				((comp.toLowerCase().indexOf(comp2.toLowerCase())))!=-1){
         			return true;
         		}
         	}
@@ -222,7 +223,9 @@ public class RssReader {
     }
     
     public static void main (String[] args){
-    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/");
+    	ArrayList<String> tag=new ArrayList<String>();
+    	tag.add("pesce");
+    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/",tag);
     	ArrayList<Post> list=new ArrayList<Post>();
     	try {
 			list=x.readPost();
