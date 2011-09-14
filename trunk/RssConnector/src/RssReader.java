@@ -187,7 +187,7 @@ public class RssReader {
         ArrayList<Post> allPost=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
-        	if (i.getText().indexOf(bannished)!=-1) continue;
+        	if ((!bannished.equals(""))&&(i.getText().indexOf(bannished)!=-1)) continue;
         	long id=getFeedbackName(i);   //id sempre presente
             String titolo="";
             String link="";
