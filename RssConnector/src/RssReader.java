@@ -20,12 +20,46 @@ public class RssReader {
 
     
     public RssReader(String boardAddress, ArrayList<String> tag, Date timestamp) {
-        this.boardAddress = boardAddress;
-        this.tag = tag;
-        this.timestamp = timestamp;
+        this.boardAddress = boardAddress;													//indirizzo bacheca
+        if (tag==null)																		//array di tag
+        	this.tag=new ArrayList<String>();
+        else
+        	this.tag = tag;
+        if (timestamp != null)
+        	this.timestamp = timestamp;
+        else{
+        	SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
+        	Date x=new Date();
+        	try {
+    			x=new Date(sdf.parse("01 01 1970").getTime());
+    		} catch (ParseException e) {}
+    		timestamp=x;
+        }
     }
     
-    public RssReader() {
+    public RssReader(String boardAddress, ArrayList<String> tag) {	
+        this.boardAddress = boardAddress;													//indirizzo bacheca
+        if (tag==null)																		//array di tag
+        	this.tag=new ArrayList<String>();
+        else
+        	this.tag = tag;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);			//data del 1970
+    	Date x=new Date();
+    	try {
+			x=new Date(sdf.parse("01 01 1970").getTime());
+		} catch (ParseException e) {}
+		timestamp=x;
+    }
+    
+    public RssReader(String boardAddress) {
+        this.boardAddress = boardAddress;   											//Indirizzo Bacheca
+        tag=new ArrayList<String>();													//Array di tag vuoto
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
+    	Date x=new Date();
+    	try {
+			x=new Date(sdf.parse("01 01 1970").getTime());
+		} catch (ParseException e) {}
+		timestamp=x;
     }
     
     public String getBoardAddress() {
@@ -153,7 +187,7 @@ public class RssReader {
     }
     
     public static void main (String[] args){
-    	RssReader x=new RssReader();
+    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/",null,null);
     	ArrayList<Post> list=new ArrayList<Post>();
     	try {
 			list=x.readPost();
