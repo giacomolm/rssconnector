@@ -7,6 +7,13 @@ public class Feedback {
 	private Title title;
 	private Date pubDate;
 
+	public Feedback(String description, Title title, Date pubDate) {
+		super();
+		this.description = description;
+		this.title = title;
+		this.pubDate = pubDate;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -38,8 +45,14 @@ public class Feedback {
 	public Date getPubDate() {
 		return pubDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Descrizione= "+description+", Titolo= "+title.toString()+", Data di pubblicazione= "+pubDate.toString();
+	}
 }
 
 enum Title{
 	AGREE, DISAGREE, PARTIALLY_AGREE, DETRACTOR;
 }
+

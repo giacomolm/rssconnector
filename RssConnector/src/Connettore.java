@@ -34,10 +34,10 @@ public class Connettore {
 		this.alias2 = alias2;
 		this.tags = tags;
 		
-		r1 = new RssReader(address1, tags, new Date(0));
+		r1 = new RssReader(address1, tags);
 		w1 = new RssWriter(address2, alias2, author1);
 		
-		r2 = new RssReader(address2, tags, new Date(0));
+		r2 = new RssReader(address2, tags);
 		w2 = new RssWriter(address1, alias1, author2);
 	}	
 	
