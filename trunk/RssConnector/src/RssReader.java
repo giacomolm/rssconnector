@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.xml.sax.SAXParseException;
+
 public class RssReader {
 
     private String boardAddress;
@@ -90,9 +92,26 @@ public class RssReader {
         this.tag = tag;
     }
 
-    public ArrayList<Feedback> readFeedbacks (long post) throws RssParserException, MalformedURLException, IOException{
-    	RssParser parser = RssParserFactory.createDefault();
-        Rss rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+post));
+    public ArrayList<Feedback> readFeedbacks (long post) {
+    	RssParser parser = null;
+    	Rss rss=null;
+    	try{
+    		parser=RssParserFactory.createDefault();
+    		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+post));
+    	} 
+    	catch  (RssParserException e){
+    		System.out.println("RssParserException");
+    		return new ArrayList<Feedback>();
+    	}
+    	catch  (MalformedURLException e){
+    		System.out.println("MalformedURLException");
+    		return new ArrayList<Feedback>();
+    	}
+    	catch  (IOException e){
+    		System.out.println("IOException");
+    		return new ArrayList<Feedback>();
+    	}
+        
         Channel c= rss.getChannel();
         if (c.getItems()==null){
         	System.out.println("Non ci sono Feedback");
@@ -134,9 +153,25 @@ public class RssReader {
         return false;
     }
     
-    public ArrayList<Post> readPost() throws RssParserException, IOException{     //manca la funzione match, per ricavare le categorie ed estrarre la data
-        RssParser parser = RssParserFactory.createDefault();
-        Rss rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
+    public ArrayList<Post> readPost() { 
+    	RssParser parser = null;
+    	Rss rss=null;
+    	try{
+    		parser=RssParserFactory.createDefault();
+    		rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
+    	} 
+    	catch  (RssParserException e){
+    		System.out.println("RssParserException");
+    		return new ArrayList<Post>();
+    	}
+    	catch  (MalformedURLException e){
+    		System.out.println("MalformedURLException");
+    		return new ArrayList<Post>();
+    	}
+    	catch  (IOException e){
+    		System.out.println("IOException");
+    		return new ArrayList<Post>();
+    	}
         Channel c= rss.getChannel();
         if (c.getItems()==null){
         	System.out.println("Non ci sono Post");
@@ -219,15 +254,9 @@ public class RssReader {
     }
     
     public static void main (String[] args){
-    	ArrayList<String> tag=new ArrayList<String>();
-    	tag.add("pesce");
-    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/",tag);
+    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/");
     	ArrayList<Post> list=new ArrayList<Post>();
-    	try {
-			list=x.readPost();
-		} catch (RssParserException e) {
-		} catch (IOException e) {
-		}
+    	list=x.readPost();
 		Iterator<Post> it=list.iterator();
 		while(it.hasNext()){
 			System.out.println(it.next());
