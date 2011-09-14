@@ -34,10 +34,10 @@ public class Connettore {
 		this.alias2 = alias2;
 		this.tags = tags;
 		
-		r1 = new RssReader(address1, tags);
+		r1 = new RssReader(address1, author2, tags);
 		w1 = new RssWriter(address2, alias2, author1);
 		
-		r2 = new RssReader(address2, tags);
+		r2 = new RssReader(address2, author1,tags);
 		w2 = new RssWriter(address1, alias1, author2);
 	}	
 	
@@ -89,10 +89,11 @@ public class Connettore {
 		return feedbacks.get(0);
 	}
 	
-	public long getFeedbackName(Post post, RssReader r){
+	public long getFeedbackName(Post post, RssReader reader){
 		
 		long res = 0;
 		ArrayList<Post> posts;
+		RssReader r = new RssReader(reader.getBoardAddress(), "");
 		posts = r.readPost();
 		if(!posts.isEmpty()){
 			for(Iterator<Post> it = posts.iterator(); it.hasNext();){
@@ -111,30 +112,26 @@ public class Connettore {
 	
 	public boolean federate(){
 		boolean res = true;
-		ArrayList<Post> posts = r1.readPost();
-		System.out.println("Dimensione "+posts.size());
+		ArrayList<Post> posts1 = r1.readPost();
+		ArrayList<Post> posts2 = r2.readPost();
 		
-		Iterator it = posts.iterator();
+		Iterator it = posts1.iterator();
 		while(it.hasNext()){
 			Post post = (Post) it.next();
-			System.out.println("Itera "+post.toString());
 			boolean esito = w1.writePost(post);
 			
 			if(esito){
 			
 				//dobbiamo recuperare il feedbackname del post appena scritto
 				long idPost = getFeedbackName(post, r2);
+				System.out.println("idpost "+idPost);
 				if(idPost!=0){
-					post.setId(idPost);
-					System.out.println(idPost);
+					
 					ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
-					/*if(!feedbacks.isEmpty()){
-						/*Feedback feedback = trust(feedbacks);
-						ArrayList<Feedback> al = new ArrayList<Feedback>();
-						al.add(feedback);
-						post.setFeedbacks(al);
+					if(!feedbacks.isEmpty()){
+						Feedback feedback = trust(feedbacks);
 						w1.writeFeedback(feedback, idPost);
-					}*/
+					}
 				}
 				else res = false;
 			}
@@ -142,9 +139,25 @@ public class Connettore {
 				
 			//Aggiorna il timestamp su A
 			
-			//fai la stessa cosa da b verso A
+		it = posts2.iterator();
+		while(it.hasNext()){
+			Post post = (Post) it.next();
+			boolean esito = w2.writePost(post);
+			
+			if(esito){
+				//dobbiamo recuperare il feedbackname del post appena scritto
+				long idPost = getFeedbackName(post, r1);
+				if(idPost!=0){
 
-		
+					ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
+					if(!feedbacks.isEmpty()){
+						Feedback feedback = trust(feedbacks);
+						w2.writeFeedback(feedback, idPost);
+					}
+				}
+				else res = false;
+			}
+		}
 		return res;
 		
 	}
