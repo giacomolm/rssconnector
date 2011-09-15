@@ -91,74 +91,81 @@ public class Connettore {
 		return feedbacks.get(0);
 	}
 	
-	public long getFeedbackName(Post post, RssReader reader){
+	/*public long getFeedbackName(Post post, RssReader reader){
 		
 		long res = 0;
 		ArrayList<Post> posts;
 		RssReader r = new RssReader(reader.getBoardAddress(), "");
 		posts = r.readPost();
-		if(!posts.isEmpty()){
-			for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-				Post p = (Post) it.next();
-				if(post.getCategory().equals(p.getCategory()) &&post.getDescription().equals(p.getDescription()) &&
-					post.getEnclosure().equals(p.getEnclosure()) &&	post.getLink().equals(p.getLink()) &&
-					post.getTitle().equals(p.getTitle()))
-					res = p.getId();
+		if(posts!=null){
+			if(!posts.isEmpty()){
+				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
+					Post p = (Post) it.next();
+					if(post.getCategory().equals(p.getCategory()) &&post.getDescription().equals(p.getDescription()) &&
+						post.getEnclosure().equals(p.getEnclosure()) &&	post.getLink().equals(p.getLink()) &&
+						post.getTitle().equals(p.getTitle()))
+						res = p.getId();
+				}
 			}
 		}
-
 		
 		return res;
 		
-	}
+	}*/
 	
 	public boolean federate(){
 		boolean res = true;
 		ArrayList<Post> posts1 = r1.readPost();
 		ArrayList<Post> posts2 = r2.readPost();
 		
-		Iterator it = posts1.iterator();
-		while(it.hasNext()){
-			Post post = (Post) it.next();
-			boolean esito = w1.writePost(post);
-			
-			if(esito){
-			
-				//dobbiamo recuperare il feedbackname del post appena scritto
-				long idPost = getFeedbackName(post, r2);
-				System.out.println("idpost "+idPost);
-				if(idPost!=0){
-					ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
-					if(!feedbacks.isEmpty()){
-						Feedback feedback = trust(feedbacks);
-						feedback.setFeedbackname(idPost);
-						w1.writeFeedback(feedback);
-					}
-				}
-				else res = false;
-			}
-		}
+		if(posts1!=null){
+			Iterator it = posts1.iterator();
+			while(it.hasNext()){
+				Post post = (Post) it.next();
+				boolean esito = w1.writePost(post);
 				
-			//Aggiorna il timestamp su A
-			
-		it = posts2.iterator();
-		while(it.hasNext()){
-			Post post = (Post) it.next();
-			boolean esito = w2.writePost(post);
-			
-			if(esito){
-				//dobbiamo recuperare il feedbackname del post appena scritto
-				long idPost = getFeedbackName(post, r1);
-				if(idPost!=0){
-
-					ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
-					if(!feedbacks.isEmpty()){
-						Feedback feedback = trust(feedbacks);
-						feedback.setFeedbackname(idPost);
-						w2.writeFeedback(feedback);
+				if(esito){
+				
+					//dobbiamo recuperare il feedbackname del post appena scritto
+					long idPost = w1.getFeedbackName(post, r2);
+					
+					if(idPost!=0){
+						ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
+						if(feedbacks!=null){
+							if(!feedbacks.isEmpty()){
+								Feedback feedback = trust(feedbacks);
+								feedback.setFeedbackname(idPost);
+								w1.writeFeedback(feedback);
+							}
+						}
 					}
+					else res = false;
 				}
-				else res = false;
+			}
+		}	
+			//Aggiorna il timestamp su A
+		if(posts2!=null){
+			Iterator it = posts2.iterator();
+			while(it.hasNext()){
+				Post post = (Post) it.next();
+				boolean esito = w2.writePost(post);
+				
+				if(esito){
+					//dobbiamo recuperare il feedbackname del post appena scritto
+					long idPost = w2.getFeedbackName(post, r1);
+					if(idPost!=0){
+	
+						ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
+						if(feedbacks!=null){
+							if(!feedbacks.isEmpty()){
+								Feedback feedback = trust(feedbacks);
+								feedback.setFeedbackname(idPost);
+								w2.writeFeedback(feedback);
+							}
+						}
+					}
+					else res = false;
+				}
 			}
 		}
 		return res;

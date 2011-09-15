@@ -81,6 +81,31 @@ public class RssWriter {
 		return response;
 	}
 
+	public long getFeedbackName(Post post, RssReader reader){
+		
+		long res = 0;
+		ArrayList<Post> posts;
+		RssReader r = new RssReader(reader.getBoardAddress(), "noone");
+		posts = r.readPost();
+		
+		if(posts!=null){
+			if(!posts.isEmpty()){
+				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
+					Post p = (Post) it.next();
+					/*&& post.getCategory().equals(p.getCategory()) &&
+					post.getEnclosure().equals(p.getEnclosure()) */
+					if(post.getDescription().equals(p.getDescription()) &&	post.getLink().equals(p.getLink()) &&
+						post.getTitle().equals(p.getTitle())){						
+						res = p.getId();
+					}
+				}
+			}
+		}
+		
+		return res;
+		
+	}
+	
 	public boolean writePost(Post post){
 		boolean response = true;
 		if(checkPost(post)){
@@ -117,6 +142,9 @@ public class RssWriter {
 					sb.append(line);
 				}
 				bf.close();
+				RssReader r = new RssReader(boardAddress, "");
+				long idPost = getFeedbackName(post, r);
+				post.setId(idPost);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				response = false;
