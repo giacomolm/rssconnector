@@ -12,12 +12,11 @@ public class WriteFeedbackTestError {
 
 	@Test
 	public void testWriteFeedback(){
-		Feedback testF = new Feedback("desc", Title.AGREE, 130824975);
+		Feedback testF = new Feedback("desc", null, 130824975);
 		RssWriter testW = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard", "alias", "author");
 		
 		int res;
-		
-		testF = new Feedback("desc", null, 130824975);
+
 		if(testW.checkFeedback(testF)) res =1;
 		else res=0;
 		assertEquals(0, res, 0);

@@ -101,6 +101,7 @@ public class RssReader {
     public ArrayList<Feedback> readFeedbacks (long post) {
     	RssParser parser = null;
     	Rss rss=null;
+    	//System.out.println("right? "+post);
     	try{
     		parser=RssParserFactory.createDefault();
     		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+post));
@@ -163,8 +164,11 @@ public class RssReader {
     	RssParser parser = null;
     	Rss rss=null;
     	try{
+    		
     		parser=RssParserFactory.createDefault();
+    		System.out.println(boardAddress);
     		rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
+    		
     	} 
     	catch  (RssParserException e){
     		System.out.println("RssParserException");

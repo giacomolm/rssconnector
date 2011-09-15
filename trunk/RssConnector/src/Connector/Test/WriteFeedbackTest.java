@@ -19,6 +19,7 @@ public class WriteFeedbackTest {
 		if(testW.checkFeedback(testF)) res =1;
 		else res=0;
 		assertEquals(1, res, 0);
+	
 	}
 
 }
