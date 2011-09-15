@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.io.ObjectInputStream.GetField;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -27,91 +28,113 @@ public class RssWriter {
 		this.author = author;
 	}
 	
+	public boolean checkPost(Post post){
+		if((post.getTitle()==null || (post.getTitle()).equals(""))&&
+		   (post.getDescription()==null || (post.getDescription()).equals(""))&&
+		   (post.getLink()==null || (post.getLink()).equals("")))
+			return false;
+		else return true;
+	}
+	
+	public boolean checkFeedback(Feedback f){
+		if((f.getTitle()==null || (f.getTitle()).equals(""))&&
+		   (f.getAuthor()==null || (f.getAuthor()).equals(""))&&
+		   (f.getDescription()==null || (f.getDescription()).equals("")))
+			return false;
+		else return true;
+	}
+	
 	public boolean writeFeedback(Feedback feedback, long idPost){
 		boolean response=true;
-		String urlString = boardAddress+"feedbacks?";
-		urlString+="action=NEWCOMMENT&";
-		urlString+="FeedbackName="+idPost+"&";
-		urlString+="description="+feedback.getDescription()+"&";
-		urlString+="author="+feedback.getAuthor()+"&";
-		urlString+="title="+feedback.getTitle();
-		
-		System.out.println("Sending URL "+urlString+" ...");
-		
-		try {
-			URL url = new URL(urlString);
-			URLConnection connection = url.openConnection();
-			BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			StringBuffer sb = new StringBuffer();
-			String line;
-			while((line = bf.readLine())!=null){
-				sb.append(line);
+		if(checkFeedback(feedback)){
+			String urlString = boardAddress+"feedbacks?";
+			urlString+="action=NEWCOMMENT&";
+			urlString+="FeedbackName="+idPost+"&";
+			urlString+="description="+feedback.getDescription()+"&";
+			urlString+="author="+feedback.getAuthor()+"&";
+			urlString+="title="+feedback.getTitle();
+			
+			System.out.println("Sending URL "+urlString+" ...");
+			
+			try {
+				URL url = new URL(urlString);
+				URLConnection connection = url.openConnection();
+				BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				StringBuffer sb = new StringBuffer();
+				String line;
+				while((line = bf.readLine())!=null){
+					sb.append(line);
+				}
+				bf.close();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				response = false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				response = false;
 			}
-			bf.close();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			response = false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			response = false;
+			System.out.println("Send Successful: "+response);
 		}
-		System.out.println("Send Successful: "+response);
+		else response = false;
 		return response;
 	}
 
 	public boolean writePost(Post post){
 		boolean response = true;
-		String urlString = boardAddress+"postboard?";
-		urlString+="action=NEWPOST&";
-		urlString+="title="+post.getTitle()+"&";
-		urlString+="description="+post.getDescription()+"&";
-		urlString+="link="+post.getLink()+"&";
-		urlString+="author="+this.author+"&";
-		urlString+="source="+this.alias;
-		if(post.getCategory()!=null){
-			Iterator ic = post.getCategory().iterator();
-			if(ic.hasNext()){
-				String category = (String) ic.next();
-				urlString+="&category="+category;
-				while(ic.hasNext()){
-					category = (String) ic.next();
-					urlString+=","+category;
-				} 
+		if(checkPost(post)){
+			String urlString = boardAddress+"postboard?";
+			urlString+="action=NEWPOST&";
+			urlString+="title="+post.getTitle()+"&";
+			urlString+="description="+post.getDescription()+"&";
+			urlString+="link="+post.getLink()+"&";
+			urlString+="author="+this.author+"&";
+			urlString+="source="+this.alias;
+			if(post.getCategory()!=null){
+				Iterator ic = post.getCategory().iterator();
+				if(ic.hasNext()){
+					String category = (String) ic.next();
+					urlString+="&category="+category;
+					while(ic.hasNext()){
+						category = (String) ic.next();
+						urlString+=","+category;
+					} 
+				}
+			}
+			if(post.getEnclosure()!=null)
+				urlString+="&enclosure="+post.getEnclosure();
+			
+			System.out.println("Sending URL "+urlString+" ...");
+			
+			try {
+				URL url = new URL(urlString);
+				URLConnection connection = url.openConnection();
+				BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				StringBuffer sb = new StringBuffer();
+				String line;
+				while((line = bf.readLine())!=null){
+					sb.append(line);
+				}
+				bf.close();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				response = false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				response = false;
+			}
+			System.out.println("Post Sending Successful: "+response);
+			//Now send feedback.
+			//Come prima cosa dobbiamo prelevare il feedback name del post appena scritto
+			//idPost = (new RssReader("bacheca di destinazione")).getFeedbackName(post); 
+			//Dopo di che scriviamo il feedback
+			if(post.getFeedbacks()!=null){
+				for(Iterator itf = post.getFeedbacks().iterator(); itf.hasNext();){
+					Feedback feedback = (Feedback) itf.next();
+					//writeFeedback(feedback, idPost);
+				}
 			}
 		}
-		if(post.getEnclosure()!=null)
-			urlString+="&enclosure="+post.getEnclosure();
-		
-		System.out.println("Sending URL "+urlString+" ...");
-		
-		try {
-			URL url = new URL(urlString);
-			URLConnection connection = url.openConnection();
-			BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			StringBuffer sb = new StringBuffer();
-			String line;
-			while((line = bf.readLine())!=null){
-				sb.append(line);
-			}
-			bf.close();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			response = false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			response = false;
-		}
-		System.out.println("Post Sending Successful: "+response);
-		//Now send feedback.
-		//Come prima cosa dobbiamo prelevare il feedback name del post appena scritto
-		//idPost = (new RssReader("bacheca di destinazione")).getFeedbackName(post); 
-		//Dopo di che scriviamo il feedback
-		if(post.getFeedbacks()!=null){
-			for(Iterator itf = post.getFeedbacks().iterator(); itf.hasNext();){
-				Feedback feedback = (Feedback) itf.next();
-				//writeFeedback(feedback, idPost);
-			}
-		}
+		else response = false;
 		return response;
 	}
 	
@@ -204,9 +227,9 @@ public class RssWriter {
 		al.add("red");
 		al.add("white");
 		al.add("green");
-		Post p = new Post(1,"titolo","http://www.google.it","Descrizione", "Giacomo",al,"http://www.yahoo.it","alias",new Date());
-		ArrayList<Post> posts = new ArrayList<Post>();
-		posts.add(p);
+		Post p = new Post(1,"titolo2","http://www.google.it","Descrizione", "Giacomo",al,"http://www.yahoo.it","alias",new Date());
+		//Feedback f = new Feedback("prova", "titolo", new Date());
+		
 		writer.writePost(p);
 	}
 }
