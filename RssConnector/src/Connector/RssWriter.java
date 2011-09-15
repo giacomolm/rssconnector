@@ -1,3 +1,5 @@
+package Connector;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,23 +31,23 @@ public class RssWriter {
 	}
 	
 	public boolean checkPost(Post post){
-		if((post.getTitle()==null || (post.getTitle()).equals(""))&&
-		   (post.getDescription()==null || (post.getDescription()).equals(""))&&
+		if((post.getTitle()==null || (post.getTitle()).equals(""))||
+		   (post.getDescription()==null || (post.getDescription()).equals(""))||
 		   (post.getLink()==null || (post.getLink()).equals("")))
 			return false;
 		else return true;
 	}
 	
 	public boolean checkFeedback(Feedback f){
-		if((f.getTitle()==null || (f.getTitle()).equals(""))&&
-		   (f.getAuthor()==null || (f.getAuthor()).equals(""))&&
-		   (f.getDescription()==null || (f.getDescription()).equals("")))
+		if((f.getTitle()==null || (f.getTitle()).equals(""))||
+		   (f.getFeedbackname()==0))
 			return false;
 		else return true;
 	}
 	
-	public boolean writeFeedback(Feedback feedback, long idPost){
+	public boolean writeFeedback(Feedback feedback){
 		boolean response=true;
+		long idPost = feedback.getFeedbackname();
 		if(checkFeedback(feedback)){
 			String urlString = boardAddress+"feedbacks?";
 			urlString+="action=NEWCOMMENT&";

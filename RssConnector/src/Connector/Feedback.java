@@ -1,3 +1,4 @@
+package Connector;
 import java.util.Date;
 
 
@@ -6,6 +7,7 @@ public class Feedback {
 	private String author;
 	private Title title;
 	private Date pubDate;
+	private long feedbackname = 0;
 
 	public Feedback(String description, Title title, Date pubDate) {
 		super();
@@ -13,6 +15,15 @@ public class Feedback {
 		this.title = title;
 		this.pubDate = pubDate;
 	}
+	
+	public Feedback(String description, Title title, long feedbackname) {
+		super();
+		this.description = description;
+		this.title = title;
+		this.setFeedbackname(feedbackname);
+	}
+	
+	
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -50,9 +61,14 @@ public class Feedback {
 	public String toString() {
 		return "Descrizione= "+description+", Titolo= "+title.toString()+", Data di pubblicazione= "+pubDate.toString();
 	}
+
+	public void setFeedbackname(long feedbackname) {
+		this.feedbackname = feedbackname;
+	}
+
+	public long getFeedbackname() {
+		return feedbackname;
+	}
 }
 
-enum Title{
-	AGREE, DISAGREE, PARTIALLY_AGREE, DETRACTOR;
-}
 
