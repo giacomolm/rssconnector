@@ -107,15 +107,15 @@ public class RssReader {
     	} 
     	catch  (RssParserException e){
     		System.out.println("RssParserException");
-    		return new ArrayList<Feedback>();
+    		return null;
     	}
     	catch  (MalformedURLException e){
     		System.out.println("MalformedURLException");
-    		return new ArrayList<Feedback>();
+    		return null;
     	}
     	catch  (IOException e){
     		System.out.println("IOException");
-    		return new ArrayList<Feedback>();
+    		return null;
     	}
         
         Channel c= rss.getChannel();
@@ -168,15 +168,15 @@ public class RssReader {
     	} 
     	catch  (RssParserException e){
     		System.out.println("RssParserException");
-    		return new ArrayList<Post>();
+    		return null;
     	}
     	catch  (MalformedURLException e){
     		System.out.println("MalformedURLException");
-    		return new ArrayList<Post>();
+    		return null;
     	}
     	catch  (IOException e){
     		System.out.println("IOException");
-    		return new ArrayList<Post>();
+    		return null;
     	}
         Channel c= rss.getChannel();
         if (c.getItems()==null){
