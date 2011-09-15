@@ -1,3 +1,4 @@
+package Connector;
 import com.sun.cnpi.rss.elements.*;
 import com.sun.cnpi.rss.parser.RssParser;
 import com.sun.cnpi.rss.parser.RssParserException;

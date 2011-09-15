@@ -1,8 +1,10 @@
+package Connector;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
 
 import com.sun.cnpi.rss.parser.RssParserException;
 
@@ -126,11 +128,11 @@ public class Connettore {
 				long idPost = getFeedbackName(post, r2);
 				System.out.println("idpost "+idPost);
 				if(idPost!=0){
-					
 					ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
 					if(!feedbacks.isEmpty()){
 						Feedback feedback = trust(feedbacks);
-						w1.writeFeedback(feedback, idPost);
+						feedback.setFeedbackname(idPost);
+						w1.writeFeedback(feedback);
 					}
 				}
 				else res = false;
@@ -152,7 +154,8 @@ public class Connettore {
 					ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
 					if(!feedbacks.isEmpty()){
 						Feedback feedback = trust(feedbacks);
-						w2.writeFeedback(feedback, idPost);
+						feedback.setFeedbackname(idPost);
+						w2.writeFeedback(feedback);
 					}
 				}
 				else res = false;
