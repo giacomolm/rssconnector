@@ -87,9 +87,59 @@ public class Connettore {
 	}
 	
 	public Feedback trust(ArrayList<Feedback> feedbacks){
+		int [] average = new int[3]; // array contenente 4 contatori, uno per ogni possibile valore di Title
 		
-		return feedbacks.get(0);
+		if(feedbacks.isEmpty()) return new Feedback("", null, 0);
+		
+		// Inizializza un oggetto Feedback con il primo (potenzialmente unico) Feedback presente nella collection
+		Feedback fRes = new Feedback("Feedback from" + feedbacks.get(0).getFeedbackname(), 
+									feedbacks.get(0).getTitle(), 
+									feedbacks.get(0).getFeedbackname()
+		);
+		
+		for(Iterator<Feedback> i = feedbacks.iterator(); i.hasNext();){
+			Feedback f = (Feedback) i.next();
+			
+			//incremento contatori
+			if (f.getTitle().equals(Title.AGREE)) average[0]++;
+			else if (f.getTitle().equals(Title.PARTIALLY_AGREE)) average[1]++;
+			else if (f.getTitle().equals(Title.DISAGREE)) average[2]++;
+			else if (f.getTitle().equals(Title.DETRACTOR)) average[3]++;
+		}
+			
+			// Politica dell'ottimismo: in caso di numero uguale di commenti di un certo valore, 
+			// prevale quello piu' "positivo"
+			
+			if ((average[0] > average[1]) && (average[0] > average[2]) && (average[0] > average[3])) fRes.setTitle(Title.AGREE);
+			else if ((average[1] > average[0]) && (average[1] > average[2]) && (average[1] > average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
+			else if ((average[2] > average[0]) && (average[2] > average[1]) && (average[2] > average[3])) fRes.setTitle(Title.DISAGREE);
+			else if ((average[3] > average[0]) && (average[3] > average[1]) && (average[3] > average[2])) fRes.setTitle(Title.DETRACTOR);
+			else if ((average[0] == average[1]) && (average[0] != average[2]) && (average[0] != average[3])
+					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.AGREE);
+			else if ((average[0] != average[1]) && (average[0] == average[2]) && (average[0] != average[3])
+					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
+			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] == average[3])
+					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.DISAGREE);
+			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
+					&& (average[1] == average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
+			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
+					&& (average[1] != average[2]) && (average[1] == average[3]) && (average[2] != average[3])) fRes.setTitle(Title.DISAGREE);
+			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
+					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] == average[3])) fRes.setTitle(Title.DISAGREE);			
+			else if ((average[0] == average[1]) && (average[0] == average[2]) && (average[1] == average[2]) 
+					&& (average[0] != average[3]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.AGREE);			
+			else if ((average[0] == average[1])  && (average[0] == average[3]) && (average[1] == average[3]) 
+					&& (average[0] != average[2]) && (average[1] != average[2]) && (average[3] != average[2])) fRes.setTitle(Title.PARTIALLY_AGREE);			
+			else if ((average[0] == average[2]) && (average[0] == average[3]) &&(average[2] == average[3]) 
+					&& (average[0] != average[1]) && (average[2] != average[1]) && (average[3] != average[1])) fRes.setTitle(Title.DISAGREE);
+			else if ((average[1] == average[2]) && (average[1] == average[3]) && (average[2] == average[3])
+					&& (average[1] != average[0]) && (average[2] != average[0]) && (average[3] != average[0])) fRes.setTitle(Title.PARTIALLY_AGREE);
+			else if ((average[0] == average[1]) && (average[0] == average[2]) && (average[0] == average[3])
+					&& (average[1] == average[2]) && (average[1] == average[3]) && (average[2] == average[3])) fRes.setTitle(Title.AGREE);
+			
+			return fRes;
 	}
+		
 	
 	/*public long getFeedbackName(Post post, RssReader reader){
 		
@@ -119,7 +169,7 @@ public class Connettore {
 		ArrayList<Post> posts2 = r2.readPost();
 		
 		if(posts1!=null){
-			Iterator it = posts1.iterator();
+			Iterator<Post> it = posts1.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
 				boolean esito = w1.writePost(post);
@@ -145,7 +195,7 @@ public class Connettore {
 		}	
 			//Aggiorna il timestamp su A
 		if(posts2!=null){
-			Iterator it = posts2.iterator();
+			Iterator <Post> it = posts2.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
 				boolean esito = w2.writePost(post);
