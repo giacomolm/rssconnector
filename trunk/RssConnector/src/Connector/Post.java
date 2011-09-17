@@ -17,7 +17,6 @@ public class Post {
 	private String enclosure;
 	private String source;
 	private Date pubDate;
-	private ArrayList<Feedback> feedbacks;
 	
 	public Post(long id, String title, String link, String description,
 			String author, ArrayList<String> category, String enclosure,
@@ -31,7 +30,6 @@ public class Post {
 		this.enclosure = enclosure;
 		this.source = source;
 		this.pubDate = pubDate;
-		this.feedbacks=new ArrayList<Feedback>();
 	}
 
 	public void setId(long id) {
@@ -105,14 +103,6 @@ public class Post {
 	public Date getPubDate() {
 		return pubDate;
 	}
-
-	public void setFeedbacks(ArrayList<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
-
-	public ArrayList<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
 	
 	public String printCategoriesToString(){
 		Iterator<String> it=this.category.iterator();
@@ -129,16 +119,9 @@ public class Post {
 	}
 	
 	public String toString(){
-		String x= "id="+this.id+", title="+this.title+", description="+this.description+
+		return "id="+this.id+", title="+this.title+", description="+this.description+
 				", link="+this.link+", autore="+this.author+", category="+printCategoriesToString()+
 				", enclosure="+this.enclosure+", source="+this.source;
-		Iterator <Feedback> it=feedbacks.iterator();
-		int i=1;
-		while (it.hasNext()){
-			x+="\n\tFeedback "+i+": "+it.next().toString();
-			i++;
-		}
-		return x;
 	}
 
 }

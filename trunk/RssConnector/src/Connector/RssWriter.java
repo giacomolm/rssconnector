@@ -38,9 +38,9 @@ public class RssWriter {
 		else return true;
 	}
 	
-	public boolean checkFeedback(Feedback f){
-		if((f.getTitle()==null || (f.getTitle()).equals(""))||
-		   (f.getFeedbackname()==0))
+	public boolean checkFeedback(Feedback feedback){
+		if((feedback.getTitle()==null || (feedback.getTitle()).equals(""))||
+		   (feedback.getFeedbackname()==0))
 			return false;
 		else return true;
 	}
@@ -81,30 +81,7 @@ public class RssWriter {
 		return response;
 	}
 
-	public long getFeedbackName(Post post, RssReader reader){
-		
-		long res = 0;
-		ArrayList<Post> posts;
-		RssReader r = new RssReader(reader.getBoardAddress(), "noone");
-		posts = r.readPost();
-		
-		if(posts!=null){
-			if(!posts.isEmpty()){
-				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-					Post p = (Post) it.next();
-					/*&& post.getCategory().equals(p.getCategory()) &&
-					post.getEnclosure().equals(p.getEnclosure()) */
-					if(post.getDescription().equals(p.getDescription()) &&	post.getLink().equals(p.getLink()) &&
-						post.getTitle().equals(p.getTitle())){						
-						res = p.getId();
-					}
-				}
-			}
-		}
-		
-		return res;
-		
-	}
+	
 	
 	public boolean writePost(Post post){
 		boolean response = true;
@@ -143,7 +120,7 @@ public class RssWriter {
 				}
 				bf.close();
 				RssReader r = new RssReader(boardAddress, "");
-				long idPost = getFeedbackName(post, r);
+				long idPost = r.findFeedbackName(post);
 				post.setId(idPost);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -153,79 +130,11 @@ public class RssWriter {
 				response = false;
 			}
 			System.out.println("Post Sending Successful: "+response);
-			//Now send feedback.
-			//Come prima cosa dobbiamo prelevare il feedback name del post appena scritto
-			//idPost = (new RssReader("bacheca di destinazione")).getFeedbackName(post); 
-			//Dopo di che scriviamo il feedback
-			if(post.getFeedbacks()!=null){
-				for(Iterator itf = post.getFeedbacks().iterator(); itf.hasNext();){
-					Feedback feedback = (Feedback) itf.next();
-					//writeFeedback(feedback, idPost);
-				}
-			}
 		}
 		else response = false;
 		return response;
 	}
 	
-	
-	public boolean writePosts(ArrayList<Post> posts){
-		boolean response = true;
-		for(Iterator it = posts.iterator(); it.hasNext();){
-			Post post = (Post) it.next();
-			String urlString = boardAddress+"postboard?";
-			urlString+="action=NEWPOST&";
-			urlString+="title="+post.getTitle()+"&";
-			urlString+="description="+post.getDescription()+"&";
-			urlString+="link="+post.getLink()+"&";
-			urlString+="author="+this.author+"&";
-			urlString+="source="+this.alias;
-			if(post.getCategory()!=null){
-				Iterator ic = post.getCategory().iterator();
-				if(ic.hasNext()){
-					String category = (String) ic.next();
-					urlString+="&category="+category;
-					while(ic.hasNext()){
-						category = (String) ic.next();
-						urlString+=","+category;
-					} 
-				}
-			}
-			if(post.getEnclosure()!=null)
-				urlString+="&enclosure="+post.getEnclosure();
-			
-			System.out.println("Sending URL "+urlString+" ...");
-			
-			try {
-				URL url = new URL(urlString);
-				URLConnection connection = url.openConnection();
-				BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				StringBuffer sb = new StringBuffer();
-				String line;
-				while((line = bf.readLine())!=null){
-					sb.append(line);
-				}
-				bf.close();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				response = false;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				response = false;
-			}
-			System.out.println("Post Sending Successful: "+response);
-			//Now send feedback.
-			//Come prima cosa dobbiamo prelevare il feedback name del post appena scritto
-			//idPost = (new RssReader("bacheca di destinazione")).getFeedbackName(post); 
-			//Dopo di che scriviamo il feedback
-			for(Iterator itf = post.getFeedbacks().iterator(); itf.hasNext();){
-				Feedback feedback = (Feedback) itf.next();
-				//writeFeedback(feedback, idPost);
-			}
-			
-		}
-		return response;
-	}
 
 	public void setBoardAddress(String boardAddress) {
 		this.boardAddress = boardAddress;

@@ -20,8 +20,6 @@ public class Connettore extends TimerTask{
 	private String alias2;
 	private ArrayList<String> tags;
 	
-	private static Connettore c;
-	
 	private RssReader r1;
 	private RssReader r2;
 	private RssWriter w1;
@@ -142,29 +140,6 @@ public class Connettore extends TimerTask{
 			
 			return fRes;
 	}
-		
-	
-	/*public long getFeedbackName(Post post, RssReader reader){
-		
-		long res = 0;
-		ArrayList<Post> posts;
-		RssReader r = new RssReader(reader.getBoardAddress(), "");
-		posts = r.readPost();
-		if(posts!=null){
-			if(!posts.isEmpty()){
-				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-					Post p = (Post) it.next();
-					if(post.getCategory().equals(p.getCategory()) &&post.getDescription().equals(p.getDescription()) &&
-						post.getEnclosure().equals(p.getEnclosure()) &&	post.getLink().equals(p.getLink()) &&
-						post.getTitle().equals(p.getTitle()))
-						res = p.getId();
-				}
-			}
-		}
-		
-		return res;
-		
-	}*/
 	
 	public boolean federate(){
 		boolean res = true;
@@ -180,7 +155,7 @@ public class Connettore extends TimerTask{
 				if(esito){
 				
 					//dobbiamo recuperare il feedbackname del post appena scritto
-					long idPost = w1.getFeedbackName(post, r2);
+					long idPost = r2.findFeedbackName(post);
 					
 					if(idPost!=0){
 						ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
@@ -205,7 +180,7 @@ public class Connettore extends TimerTask{
 				
 				if(esito){
 					//dobbiamo recuperare il feedbackname del post appena scritto
-					long idPost = w2.getFeedbackName(post, r1);
+					long idPost = r1.findFeedbackName(post);
 					if(idPost!=0){
 	
 						ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
@@ -228,8 +203,8 @@ public class Connettore extends TimerTask{
 	public static void main(String[] args) {
 		
 		
-		if(args.length<6){
-			System.out.println("Usage connettore: [Url_VirtualBoard1] [Url_VirtualBoard2] [Default_Author_VB1] [Default_Author_VB2] [Alias_VB1] [Alias_VB2] [Tag1 if Exists] [Tag2 if exists] [TagN if exists]..");
+		if(args.length<7){
+			System.out.println("Usage connettore: [Url_VirtualBoard1] [Url_VirtualBoard2] [Default_Author_VB1] [Default_Author_VB2] [Alias_VB1] [Alias_VB2] [Refresh_Timer_Virtualboard] [Tag1 if Exists] [Tag2 if exists] [TagN if exists]..");
 		}
 		else{
 			String url_vb1=args[0];
@@ -238,20 +213,21 @@ public class Connettore extends TimerTask{
 			String author2=args[3];
 			String alias1=args[4];
 			String alias2=args[5];
+			int timer=Integer.parseInt(args[6])*1000;
 			ArrayList<String> al = new ArrayList<String>();
-			for(int i = 7; i<args.length; i++){
+			for(int i = 8; i<args.length; i++){
 				al.add(args[i]);
 			}
 			//Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", new ArrayList<String>());
-			c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, al);
+			Connettore c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, al);
 			Timer t = new Timer();
-			t.schedule(c, new Date(0), 300000);
+			t.schedule(c, new Date(0), timer);
 		}
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		c.federate();
+		federate();
 	}
 }
