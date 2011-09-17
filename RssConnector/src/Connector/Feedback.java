@@ -7,7 +7,7 @@ public class Feedback {
 	private String author;
 	private Title title;
 	private Date pubDate;
-	private long feedbackname = 0;
+	private long feedbackName = 0;
 
 	public Feedback(String description, Title title, Date pubDate) {
 		super();
@@ -63,11 +63,11 @@ public class Feedback {
 	}
 
 	public void setFeedbackname(long feedbackname) {
-		this.feedbackname = feedbackname;
+		this.feedbackName = feedbackname;
 	}
 
 	public long getFeedbackname() {
-		return feedbackname;
+		return feedbackName;
 	}
 }
 

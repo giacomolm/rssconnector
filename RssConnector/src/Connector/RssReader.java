@@ -98,13 +98,13 @@ public class RssReader {
         this.tag = tag;
     }
 
-    public ArrayList<Feedback> readFeedbacks (long post) {
+    public ArrayList<Feedback> readFeedbacks (long idPost) {
     	RssParser parser = null;
     	Rss rss=null;
     	//System.out.println("right? "+post);
     	try{
     		parser=RssParserFactory.createDefault();
-    		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+post));
+    		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost));
     	} 
     	catch  (RssParserException e){
     		System.out.println("RssParserException");
@@ -261,6 +261,29 @@ public class RssReader {
     	String guid =x.getGuid().getText();
     	return Long.valueOf(guid.substring(guid.indexOf('=')+1)).longValue();
     }
+    
+public long findFeedbackName(Post post){
+		
+		RssReader r = new RssReader(boardAddress, "noOne");
+		ArrayList<Post> posts = r.readPost();
+		
+		if(posts!=null){
+			if(!posts.isEmpty()){
+				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
+					Post p = (Post) it.next();
+					/*&& post.getCategory().equals(p.getCategory()) &&
+					post.getEnclosure().equals(p.getEnclosure()) */
+					if(post.getDescription().equals(p.getDescription()) &&	post.getLink().equals(p.getLink()) &&
+						post.getTitle().equals(p.getTitle())){						
+						return p.getId();
+					}
+				}
+			}
+		}
+		
+		return 0;
+		
+	}
     
     public static void main (String[] args){
     	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","");
