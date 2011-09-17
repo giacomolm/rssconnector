@@ -3,12 +3,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import com.sun.cnpi.rss.parser.RssParserException;
 
 
-public class Connettore {
+public class Connettore extends TimerTask{
 
 	private String address1;
 	private String address2;
@@ -17,6 +19,8 @@ public class Connettore {
 	private String alias1;
 	private String alias2;
 	private ArrayList<String> tags;
+	
+	private static Connettore c;
 	
 	private RssReader r1;
 	private RssReader r2;
@@ -86,7 +90,7 @@ public class Connettore {
 	}
 	
 	public Feedback trust(ArrayList<Feedback> feedbacks){
-		int [] average = new int[3]; // array contenente 4 contatori, uno per ogni possibile valore di Title
+		int [] average = new int[4]; // array contenente 4 contatori, uno per ogni possibile valore di Title
 		
 		if(feedbacks.isEmpty()) return new Feedback("", null, 0);
 		
@@ -192,7 +196,7 @@ public class Connettore {
 				}
 			}
 		}	
-			//Aggiorna il timestamp su A
+		
 		if(posts2!=null){
 			Iterator <Post> it = posts2.iterator();
 			while(it.hasNext()){
@@ -223,7 +227,31 @@ public class Connettore {
 
 	public static void main(String[] args) {
 		
-		Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", new ArrayList<String>());
+		
+		if(args.length<6){
+			System.out.println("Usage connettore: [Url_VirtualBoard1] [Url_VirtualBoard2] [Default_Author_VB1] [Default_Author_VB2] [Alias_VB1] [Alias_VB2] [Tag1 if Exists] [Tag2 if exists] [TagN if exists]..");
+		}
+		else{
+			String url_vb1=args[0];
+			String url_vb2=args[1];
+			String author1=args[2];
+			String author2=args[3];
+			String alias1=args[4];
+			String alias2=args[5];
+			ArrayList<String> al = new ArrayList<String>();
+			for(int i = 7; i<args.length; i++){
+				al.add(args[i]);
+			}
+			//Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", new ArrayList<String>());
+			c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, al);
+			Timer t = new Timer();
+			t.schedule(c, new Date(0), 300000);
+		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		c.federate();
 	}
 }
