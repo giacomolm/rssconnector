@@ -143,8 +143,8 @@ public class Connettore extends TimerTask{
 	
 	public boolean federate(){
 		boolean res = true;
-		ArrayList<Post> posts1 = r1.readPost();
-		ArrayList<Post> posts2 = r2.readPost();
+		ArrayList<Post> posts1 = r1.readPosts();
+		ArrayList<Post> posts2 = r2.readPosts();
 		
 		if(posts1!=null){
 			Iterator<Post> it = posts1.iterator();

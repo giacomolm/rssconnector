@@ -140,11 +140,11 @@ public class RssReader {
         return lista;
     }
     
-    private boolean match(Post post){
+    private boolean match(ArrayList<String> x){
     	if (tag.isEmpty()){
     		return true;
     	}
-        Iterator<String> it=post.getCategory().iterator();
+        Iterator<String> it=x.iterator();
         while(it.hasNext()){
         	String comp=it.next();
         	Iterator<String> itTag = tag.iterator();
@@ -160,7 +160,7 @@ public class RssReader {
         return false;
     }
     
-    public ArrayList<Post> readPost() { 
+    public ArrayList<Post> readPosts() { 
     	RssParser parser = null;
     	Rss rss=null;
     	try{
@@ -189,7 +189,7 @@ public class RssReader {
         }
         ArrayList<Item> items=new ArrayList<Item>(c.getItems());
         Iterator iter = items.iterator();
-        ArrayList<Post> allPost=new ArrayList<Post>();
+        ArrayList<Post> res=new ArrayList<Post>();
         while (iter.hasNext()){
         	Item i=(Item)iter.next();
         	if ((!bannished.equals(""))&&(i.getText().indexOf(bannished)!=-1)) continue;
@@ -225,14 +225,9 @@ public class RssReader {
             	source=i.getSource().getText();
             }
             catch (NullPointerException e){}
+            if (!(match(categories)&&timestamp.before(date))) continue;
         	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
-        	allPost.add(p);
-        }
-        Iterator<Post> it2 = allPost.iterator();
-        ArrayList<Post> res=new ArrayList<Post>();
-        while(it2.hasNext()){
-        	Post x=it2.next();
-        	if (match(x)&&timestamp.before(x.getPubDate()))	res.add(x);
+        	res.add(p);
         }
         timestamp=new Date();
         return res;
@@ -265,7 +260,7 @@ public class RssReader {
 public long findFeedbackName(Post post){
 		
 		RssReader r = new RssReader(boardAddress, "noOne");
-		ArrayList<Post> posts = r.readPost();
+		ArrayList<Post> posts = r.readPosts();
 		
 		if(posts!=null){
 			if(!posts.isEmpty()){
@@ -288,7 +283,7 @@ public long findFeedbackName(Post post){
     public static void main (String[] args){
     	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","");
     	ArrayList<Post> list=new ArrayList<Post>();
-    	list=x.readPost();
+    	list=x.readPosts();
 		Iterator<Post> it=list.iterator();
 		while(it.hasNext()){
 			System.out.println(it.next());

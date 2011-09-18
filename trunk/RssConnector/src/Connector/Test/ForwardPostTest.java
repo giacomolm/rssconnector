@@ -21,7 +21,7 @@ public class ForwardPostTest {
 	@Before public void read(){
 		RssReader testR = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "anonymus");
 		int res = 0;
-		ArrayList<Post> testA = testR.readPost();
+		ArrayList<Post> testA = testR.readPosts();
 		
 		if(testA!=null) res = 1;
 		assertEquals(0, res,0);
