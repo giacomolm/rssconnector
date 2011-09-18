@@ -200,7 +200,6 @@ public class Connettore extends TimerTask{
 			for(int i = 8; i<args.length; i++){
 				al.add(args[i]);
 			}
-			//Connettore c = new Connettore("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "AL", "Vinci.88", "Atlantis", "Eric", new ArrayList<String>());
 			Connettore c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, al);
 			Timer t = new Timer();
 			t.schedule(c, new Date(0), timer);

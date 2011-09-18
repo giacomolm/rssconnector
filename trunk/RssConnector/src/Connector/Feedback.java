@@ -57,17 +57,17 @@ public class Feedback {
 		return pubDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Descrizione= "+description+", Titolo= "+title.toString()+", Data di pubblicazione= "+pubDate.toString();
-	}
-
 	public void setFeedbackname(long feedbackname) {
 		this.feedbackName = feedbackname;
 	}
 
 	public long getFeedbackname() {
 		return feedbackName;
+	}
+	
+	@Override
+	public String toString() {
+		return "Descrizione= "+description+", Titolo= "+title.toString()+", Data di pubblicazione= "+pubDate.toString();
 	}
 }
 
