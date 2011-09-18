@@ -107,36 +107,18 @@ public class Connettore extends TimerTask{
 			else if (f.getTitle().equals(Title.DISAGREE)) average[2]++;
 			else if (f.getTitle().equals(Title.DETRACTOR)) average[3]++;
 		}
+			int agree = 10;
+			int partially_agree= 7;
+			int disagree = 4;
+			int detractor = 1;
 			
-			// Politica dell'ottimismo: in caso di numero uguale di commenti di un certo valore, 
-			// prevale quello piu' "positivo"
+			float result = ((average[0] * agree) + (average[1] * partially_agree) + (average[2] * disagree) + (average[3] * detractor)) / (average[0]+average[1]+average[2]+average[3]);
 			
-			if ((average[0] > average[1]) && (average[0] > average[2]) && (average[0] > average[3])) fRes.setTitle(Title.AGREE);
-			else if ((average[1] > average[0]) && (average[1] > average[2]) && (average[1] > average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
-			else if ((average[2] > average[0]) && (average[2] > average[1]) && (average[2] > average[3])) fRes.setTitle(Title.DISAGREE);
-			else if ((average[3] > average[0]) && (average[3] > average[1]) && (average[3] > average[2])) fRes.setTitle(Title.DETRACTOR);
-			else if ((average[0] == average[1]) && (average[0] != average[2]) && (average[0] != average[3])
-					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.AGREE);
-			else if ((average[0] != average[1]) && (average[0] == average[2]) && (average[0] != average[3])
-					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
-			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] == average[3])
-					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.DISAGREE);
-			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
-					&& (average[1] == average[2]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.PARTIALLY_AGREE);
-			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
-					&& (average[1] != average[2]) && (average[1] == average[3]) && (average[2] != average[3])) fRes.setTitle(Title.DISAGREE);
-			else if ((average[0] != average[1]) && (average[0] != average[2]) && (average[0] != average[3])
-					&& (average[1] != average[2]) && (average[1] != average[3]) && (average[2] == average[3])) fRes.setTitle(Title.DISAGREE);			
-			else if ((average[0] == average[1]) && (average[0] == average[2]) && (average[1] == average[2]) 
-					&& (average[0] != average[3]) && (average[1] != average[3]) && (average[2] != average[3])) fRes.setTitle(Title.AGREE);			
-			else if ((average[0] == average[1])  && (average[0] == average[3]) && (average[1] == average[3]) 
-					&& (average[0] != average[2]) && (average[1] != average[2]) && (average[3] != average[2])) fRes.setTitle(Title.PARTIALLY_AGREE);			
-			else if ((average[0] == average[2]) && (average[0] == average[3]) &&(average[2] == average[3]) 
-					&& (average[0] != average[1]) && (average[2] != average[1]) && (average[3] != average[1])) fRes.setTitle(Title.DISAGREE);
-			else if ((average[1] == average[2]) && (average[1] == average[3]) && (average[2] == average[3])
-					&& (average[1] != average[0]) && (average[2] != average[0]) && (average[3] != average[0])) fRes.setTitle(Title.PARTIALLY_AGREE);
-			else if ((average[0] == average[1]) && (average[0] == average[2]) && (average[0] == average[3])
-					&& (average[1] == average[2]) && (average[1] == average[3]) && (average[2] == average[3])) fRes.setTitle(Title.AGREE);
+			if(result <= 10 && result > 7) fRes.setTitle(Title.AGREE);
+			else if(result <= 7 && result > 4) fRes.setTitle(Title.PARTIALLY_AGREE);
+			else if(result <= 4 && result > 1) fRes.setTitle(Title.DISAGREE);
+			else if(result <= 1 ) fRes.setTitle(Title.DETRACTOR);
+			
 			
 			return fRes;
 	}
