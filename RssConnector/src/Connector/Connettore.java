@@ -93,7 +93,7 @@ public class Connettore extends TimerTask{
 		if(feedbacks.isEmpty()) return new Feedback("", null, 0);
 		
 		// Inizializza un oggetto Feedback con il primo (potenzialmente unico) Feedback presente nella collection
-		Feedback fRes = new Feedback("Feedback from" + feedbacks.get(0).getFeedbackname(), 
+		Feedback fRes = new Feedback("Feedback_from" + feedbacks.get(0).getFeedbackname(), 
 									feedbacks.get(0).getTitle(), 
 									feedbacks.get(0).getFeedbackname()
 		);

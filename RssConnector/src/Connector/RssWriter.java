@@ -70,6 +70,7 @@ public class RssWriter {
 				bf.close();
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
 				response = false;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -119,9 +120,9 @@ public class RssWriter {
 					sb.append(line);
 				}
 				bf.close();
-				RssReader r = new RssReader(boardAddress, "");
-				long idPost = r.findFeedbackName(post);
-				post.setId(idPost);
+				//RssReader r = new RssReader(boardAddress, "");
+				//long idPost = r.findFeedbackName(post);
+				//post.setId(idPost);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				response = false;
