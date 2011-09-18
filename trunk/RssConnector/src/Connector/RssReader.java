@@ -94,7 +94,15 @@ public class RssReader {
         return tag;
     }
 
-    public void setTag(ArrayList<String> tag) {
+    public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setTag(ArrayList<String> tag) {
         this.tag = tag;
     }
 
@@ -230,7 +238,8 @@ public class RssReader {
         	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
         	res.add(p);
         }
-        timestamp=new Date();
+        if (res.size()>0)
+        	timestamp=res.get(res.size()-1).getPubDate();
         return res;
         }
     
