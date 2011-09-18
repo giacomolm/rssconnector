@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmlns:uml2tools.notation="http://www.eclipse.org/mdt/uml2tools/gmf/notation/ext/2008" xmi:id="_p0HuMOB7EeCbHu8t0Ij2Og" type="UMLClass" measurementUnit="Pixel">
-  <styles xmi:type="notation:DiagramStyle" xmi:id="_p0HuMeB7EeCbHu8t0Ij2Og"/>
-  <styles xmi:type="uml2tools.notation:U2TDiagramCanonicalStyle" xmi:id="_p0HuMuB7EeCbHu8t0Ij2Og"/>
-  <styles xmi:type="notation:FilteringStyle" xmi:id="_p0HuM-B7EeCbHu8t0Ij2Og"/>
-  <element xmi:type="uml:Model" href="ClassDiagram.uml#eee_1045467100313_135436_1"/>
-</notation:Diagram>
