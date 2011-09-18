@@ -107,6 +107,7 @@ public class RssReader {
     		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost));
     	} 
     	catch  (RssParserException e){
+    		System.out.println(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost);
     		System.out.println("RssParserException");
     		return null;
     	}
