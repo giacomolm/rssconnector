@@ -30,6 +30,30 @@ public class RssWriter {
 		this.author = author;
 	}
 	
+	public void setBoardAddress(String boardAddress) {
+		this.boardAddress = boardAddress;
+	}
+
+	public String getBoardAddress() {
+		return boardAddress;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+	
 	public boolean checkPost(Post post){
 		if((post.getTitle()==null || (post.getTitle()).equals(""))||
 		   (post.getDescription()==null || (post.getDescription()).equals(""))||
@@ -120,9 +144,6 @@ public class RssWriter {
 					sb.append(line);
 				}
 				bf.close();
-				//RssReader r = new RssReader(boardAddress, "");
-				//long idPost = r.findFeedbackName(post);
-				//post.setId(idPost);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				response = false;
@@ -136,40 +157,4 @@ public class RssWriter {
 		return response;
 	}
 	
-
-	public void setBoardAddress(String boardAddress) {
-		this.boardAddress = boardAddress;
-	}
-
-	public String getBoardAddress() {
-		return boardAddress;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-	
-	public static void main(String[] args) {
-		RssWriter writer = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","atlantis","vinny");
-		ArrayList<String> al = new ArrayList<String>();
-		al.add("red");
-		al.add("white");
-		al.add("green");
-		Post p = new Post(1,"titolo2","http://www.google.it","Descrizione", "Giacomo",al,"http://www.yahoo.it","alias",new Date());
-		//Feedback f = new Feedback("prova", "titolo", new Date());
-		
-		writer.writePost(p);
-	}
 }

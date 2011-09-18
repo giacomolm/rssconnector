@@ -94,6 +94,10 @@ public class RssReader {
         return tag;
     }
 
+	public void setTag(ArrayList<String> tag) {
+        this.tag = tag;
+    }
+	
     public Date getTimestamp() {
 		return timestamp;
 	}
@@ -101,53 +105,6 @@ public class RssReader {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	public void setTag(ArrayList<String> tag) {
-        this.tag = tag;
-    }
-
-    public ArrayList<Feedback> readFeedbacks (long idPost) {
-    	RssParser parser = null;
-    	Rss rss=null;
-    	//System.out.println("right? "+post);
-    	try{
-    		parser=RssParserFactory.createDefault();
-    		rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost));
-    	} 
-    	catch  (RssParserException e){
-    		System.out.println(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost);
-    		System.out.println("RssParserException");
-    		return null;
-    	}
-    	catch  (MalformedURLException e){
-    		System.out.println("MalformedURLException");
-    		return null;
-    	}
-    	catch  (IOException e){
-    		System.out.println("IOException");
-    		return null;
-    	}
-        
-        Channel c= rss.getChannel();
-        if (c.getItems()==null){
-        	System.out.println("Non ci sono Feedback");
-        	return new ArrayList<Feedback>();
-        }
-        ArrayList<Item> items=new ArrayList<Item>(c.getItems());
-        Iterator<Item> iter = items.iterator();
-        ArrayList<Feedback> lista=new ArrayList<Feedback>();
-        while(iter.hasNext()){
-        	Item x=iter.next();
-        	String description="";
-        	Title titolo=Title.valueOf(x.getTitle().getText());
-        	Date data=getPubDate(x);
-        	try{
-        		description=x.getDescription().getText();
-        	} catch (NullPointerException e){}
-        	lista.add(new Feedback(description,titolo,data));
-        }
-        return lista;
-    }
     
     private boolean match(ArrayList<String> x){
     	if (tag.isEmpty()){
@@ -169,79 +126,6 @@ public class RssReader {
         return false;
     }
     
-    public ArrayList<Post> readPosts() { 
-    	RssParser parser = null;
-    	Rss rss=null;
-    	try{
-    		
-    		parser=RssParserFactory.createDefault();
-    		System.out.println(boardAddress);
-    		rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
-    		
-    	} 
-    	catch  (RssParserException e){
-    		System.out.println("RssParserException");
-    		return null;
-    	}
-    	catch  (MalformedURLException e){
-    		System.out.println("MalformedURLException");
-    		return null;
-    	}
-    	catch  (IOException e){
-    		System.out.println("IOException");
-    		return null;
-    	}
-        Channel c= rss.getChannel();
-        if (c.getItems()==null){
-        	System.out.println("Non ci sono Post");
-        	return new ArrayList<Post>();
-        }
-        ArrayList<Item> items=new ArrayList<Item>(c.getItems());
-        Iterator iter = items.iterator();
-        ArrayList<Post> res=new ArrayList<Post>();
-        while (iter.hasNext()){
-        	Item i=(Item)iter.next();
-        	if ((!bannished.equals(""))&&(i.getText().indexOf(bannished)!=-1)) continue;
-        	long id=getFeedbackName(i);   //id sempre presente
-            String titolo="";
-            String link="";
-            String description="";
-            ArrayList<String> categories=new ArrayList<String>();
-            String enclosure="";
-            String source="";
-            Date date=getPubDate(i);    //data sempre presente
-            try{
-            	titolo=i.getTitle().getText();
-            }
-            catch (NullPointerException e){}
-            try{
-            	link=i.getLink().getText();
-            }
-            catch (NullPointerException e){}
-            try{
-            	description=i.getDescription().getText();
-            }
-            catch (NullPointerException e){}
-            try{
-            	categories=getCategories(i);
-            }
-            catch (NullPointerException e){}
-            try{
-            	enclosure=i.getEnclosure().getText();
-            }
-            catch (NullPointerException e){}
-            try{
-            	source=i.getSource().getText();
-            }
-            catch (NullPointerException e){}
-            if (!(match(categories)&&timestamp.before(date))) continue;
-        	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
-        	res.add(p);
-        }
-        if (res.size()>0)
-        	timestamp=res.get(res.size()-1).getPubDate();
-        return res;
-        }
     
     private ArrayList <String> getCategories(Item item){
     	ArrayList <String> lista=new ArrayList<String>();
@@ -267,37 +151,146 @@ public class RssReader {
     	return Long.valueOf(guid.substring(guid.indexOf('=')+1)).longValue();
     }
     
-public long findFeedbackName(Post post){
-		
-		RssReader r = new RssReader(boardAddress, "noOne");
-		ArrayList<Post> posts = r.readPosts();
-		
-		if(posts!=null){
-			if(!posts.isEmpty()){
-				for(Iterator<Post> it = posts.iterator(); it.hasNext();){
-					Post p = (Post) it.next();
-					/*&& post.getCategory().equals(p.getCategory()) &&
-					post.getEnclosure().equals(p.getEnclosure()) */
-					if(post.getDescription().equals(p.getDescription()) &&	post.getLink().equals(p.getLink()) &&
-						post.getTitle().equals(p.getTitle())){						
-						return p.getId();
+	public long findFeedbackName(Post post){
+			
+			RssReader r = new RssReader(boardAddress, "noOne");
+			ArrayList<Post> posts = r.readPosts();
+			
+			if(posts!=null){
+				if(!posts.isEmpty()){
+					for(Iterator<Post> it = posts.iterator(); it.hasNext();){
+						Post p = (Post) it.next();
+						/*&& post.getCategory().equals(p.getCategory()) &&
+						post.getEnclosure().equals(p.getEnclosure()) */
+						if(post.getDescription().equals(p.getDescription()) &&	post.getLink().equals(p.getLink()) &&
+							post.getTitle().equals(p.getTitle())){						
+							return p.getId();
+						}
 					}
 				}
 			}
+			
+			return 0;
+			
 		}
-		
-		return 0;
-		
+	
+	
+	public ArrayList<Feedback> readFeedbacks (long idPost) {
+		RssParser parser = null;
+		Rss rss=null;
+		//System.out.println("right? "+post);
+		try{
+			parser=RssParserFactory.createDefault();
+			rss = parser.parse(new URL(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost));
+		} 
+		catch  (RssParserException e){
+			System.out.println(boardAddress+"feedbacks?action=READ&FeedbackName="+idPost);
+			System.out.println("RssParserException");
+			return null;
+		}
+		catch  (MalformedURLException e){
+			System.out.println("MalformedURLException");
+			return null;
+		}
+		catch  (IOException e){
+			System.out.println("IOException");
+			return null;
+		}
+	    
+	    Channel c= rss.getChannel();
+	    if (c.getItems()==null){
+	    	System.out.println("Non ci sono Feedback");
+	    	return new ArrayList<Feedback>();
+	    }
+	    ArrayList<Item> items=new ArrayList<Item>(c.getItems());
+	    Iterator<Item> iter = items.iterator();
+	    ArrayList<Feedback> lista=new ArrayList<Feedback>();
+	    while(iter.hasNext()){
+	    	Item x=iter.next();
+	    	String description="";
+	    	Title titolo=Title.valueOf(x.getTitle().getText());
+	    	Date data=getPubDate(x);
+	    	try{
+	    		description=x.getDescription().getText();
+	    	} catch (NullPointerException e){}
+	    	lista.add(new Feedback(description,titolo,data));
+	    }
+	    return lista;
 	}
-    
-    public static void main (String[] args){
-    	RssReader x=new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/","");
-    	ArrayList<Post> list=new ArrayList<Post>();
-    	list=x.readPosts();
-		Iterator<Post> it=list.iterator();
-		while(it.hasNext()){
-			System.out.println(it.next());
-		}
+	    
+	
+	public ArrayList<Post> readPosts() { 
+	RssParser parser = null;
+	Rss rss=null;
+	try{
+		
+		parser=RssParserFactory.createDefault();
+		System.out.println(boardAddress);
+		rss = parser.parse(new URL(boardAddress+"postboard?action=READ"));
+		
+	} 
+	catch  (RssParserException e){
+		System.out.println("RssParserException");
+		return null;
+	}
+	catch  (MalformedURLException e){
+		System.out.println("MalformedURLException");
+		return null;
+	}
+	catch  (IOException e){
+		System.out.println("IOException");
+		return null;
+	}
+    Channel c= rss.getChannel();
+    if (c.getItems()==null){
+    	System.out.println("Non ci sono Post");
+    	return new ArrayList<Post>();
+    }
+    ArrayList<Item> items=new ArrayList<Item>(c.getItems());
+    Iterator iter = items.iterator();
+    ArrayList<Post> res=new ArrayList<Post>();
+    while (iter.hasNext()){
+    	Item i=(Item)iter.next();
+    	if ((!bannished.equals(""))&&(i.getText().indexOf(bannished)!=-1)) continue;
+    	long id=getFeedbackName(i);   //id sempre presente
+        String titolo="";
+        String link="";
+        String description="";
+        ArrayList<String> categories=new ArrayList<String>();
+        String enclosure="";
+        String source="";
+        Date date=getPubDate(i);    //data sempre presente
+        try{
+        	titolo=i.getTitle().getText();
+        }
+        catch (NullPointerException e){}
+        try{
+        	link=i.getLink().getText();
+        }
+        catch (NullPointerException e){}
+        try{
+        	description=i.getDescription().getText();
+        }
+        catch (NullPointerException e){}
+        try{
+        	categories=getCategories(i);
+        }
+        catch (NullPointerException e){}
+        try{
+        	enclosure=i.getEnclosure().getText();
+        }
+        catch (NullPointerException e){}
+        try{
+        	source=i.getSource().getText();
+        }
+        catch (NullPointerException e){}
+        if (!(match(categories)&&timestamp.before(date))) continue;
+    	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
+    	res.add(p);
+    }
+    if (res.size()>0)
+    	timestamp=res.get(res.size()-1).getPubDate();
+    return res;
     }
 }
 
