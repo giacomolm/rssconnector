@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 
 import com.sun.cnpi.rss.parser.RssParserException;
-
+ 
 
 public class Connettore extends TimerTask{
 
