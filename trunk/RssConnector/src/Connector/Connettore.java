@@ -10,7 +10,7 @@ import java.util.TimerTask;
 import com.sun.cnpi.rss.parser.RssParserException;
  
 
-public class Connettore extends TimerTask{
+public class Connettore{
 
 	private String address1;
 	private String address2;
@@ -140,7 +140,7 @@ public class Connettore extends TimerTask{
 					long idPost = r2.findFeedbackName(post);
 					
 					if(idPost!=0){
-						ArrayList<Feedback> feedbacks = r1.readFeedbacks(post.getId());
+						ArrayList<Feedback> feedbacks = post.getFeedbacks();
 						if(feedbacks!=null){
 							if(!feedbacks.isEmpty()){
 								Feedback feedback = trust(feedbacks);
@@ -185,7 +185,7 @@ public class Connettore extends TimerTask{
 	public static void main(String[] args) {
 		
 		
-		if(args.length<7){
+		/*if(args.length<7){
 			System.out.println("Usage connettore: [Url_VirtualBoard1] [Url_VirtualBoard2] [Default_Author_VB1] [Default_Author_VB2] [Alias_VB1] [Alias_VB2] [Refresh_Timer_Virtualboard] [Tag1 if Exists] [Tag2 if exists] [TagN if exists]..");
 		}
 		else{
@@ -203,12 +203,165 @@ public class Connettore extends TimerTask{
 			Connettore c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, al);
 			Timer t = new Timer();
 			t.schedule(c, new Date(0), timer);
+		}*/
+		java.io.BufferedReader console = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
+		String url_vb1="";
+		String url_vb2="";
+		String author1="";
+		String author2="";
+		String alias1="";
+		String alias2="";
+		String yn="";
+		String tag="";
+		ArrayList<String> lista=new ArrayList<String>();
+		boolean ancora=true;
+		boolean repeat=true;
+		boolean inserisci=true;
+		boolean ok=true;
+		boolean inserisciParametri=true;
+		Connettore c=new Connettore("default1","default2","default3","default4","default5","default6",new ArrayList<String>()); 
+		System.out.println("Questo programma federa due bacheche virtuali.");
+		while (repeat){
+			if (inserisciParametri){
+				System.out.print("Inserisci il link della prima bacheca: ");
+				while (inserisci){
+					try {
+						url_vb1 = console.readLine();
+						if (url_vb1==null) throw new IOException();
+						if (url_vb1.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'indirizzo della prima bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				inserisci=true;
+				System.out.print("Inserisci il link della seconda bacheca: ");			
+				while (inserisci){
+					try {
+						url_vb2 = console.readLine();
+						if (url_vb2==null) throw new IOException();
+						if (url_vb2.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'indirizzo della seconda bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				inserisci=true;
+				System.out.print("Inserisci l'autore per la prima bacheca: ");
+				while (inserisci){
+					try {
+						author1 = console.readLine();
+						if (author1==null) throw new IOException();
+						if (author1.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'autore per la prima bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				inserisci=true;
+				System.out.print("Inserisci l'autore per la seconda bacheca: ");
+				while (inserisci){
+					try {
+						author2 = console.readLine();
+						if (author2==null) throw new IOException();
+						if (author2.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'autore per la seconda bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				inserisci=true;
+				System.out.print("Inserisci l'alias per la prima bacheca: ");
+				while (inserisci){
+					try {
+						alias1 = console.readLine();
+						if (alias1==null) throw new IOException();
+						if (alias1.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'alias per la prima bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				inserisci=true;
+				System.out.print("Inserisci l'alias per la seconda bacheca: ");
+				while (inserisci){
+					try {
+						alias2 = console.readLine();
+						if (alias2==null) throw new IOException();
+						if (alias2.isEmpty()) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento dell'alias per la seconda bacheca, inseriscilo di nuovo: ");
+						}
+				}
+				System.out.print("Vuoi filtrare i post da federare? (Y/N) ");
+				inserisci=true;
+				while (inserisci){
+					try {
+						yn = console.readLine();
+						if (yn==null) throw new IOException();
+						if (yn.isEmpty()) throw new IOException();
+						if (!((yn.toUpperCase().equals("Y"))||(yn.toUpperCase().equals("N")))) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento della risposta, inseriscila di nuovo: ");
+						}
+				}
+				if (yn.toUpperCase().equals("Y")){
+					while (ancora){
+						inserisci=true;
+						System.out.print("Inserisci una parola per aggiungerla come tag per il filtraggio oppure " +
+								"direttamente invio per avviare la federazione: ");
+						while (inserisci){
+							try {
+								tag = console.readLine();
+								if (tag==null) throw new IOException();
+								inserisci=false;
+							} catch (IOException e) {
+								System.out.print("Errore nell'inserimento del tag, inseriscilo di nuovo: ");
+								}
+						}
+						if (tag.isEmpty()) ancora=false; 
+						else lista.add(tag);
+					}
+				}
+				inserisciParametri=false;
+				c = new Connettore(url_vb1, url_vb2, author1, author2, alias1, alias2, lista);
+			}
+			ok=c.federate();
+			if (ok) System.out.println("Federazione avvenuta con successo.");
+			else System.out.println("Ci sono stati errori nella federazione.");
+			inserisci=true;
+			System.out.println("Vuoi avviare di nuovo la federazione? (Y/N) ");
+			while (inserisci){
+				try {
+					yn = console.readLine();
+					if (yn==null) throw new IOException();
+					if (yn.isEmpty()) throw new IOException();
+					if (!((yn.toUpperCase().equals("Y"))||(yn.toUpperCase().equals("N")))) throw new IOException();
+					inserisci=false;
+				} catch (IOException e) {
+					System.out.print("Errore nell'inserimento della risposta, inseriscila di nuovo: ");
+					}
+			}
+			if (yn.toUpperCase().equals("N"))
+				break;
+			else {
+				inserisci=true;
+				System.out.print("Vuoi cambiare i parametri?: ");
+				while (inserisci){
+					try {
+						yn = console.readLine();
+						if (yn==null) throw new IOException();
+						if (yn.isEmpty()) throw new IOException();
+						if (!((yn.toUpperCase().equals("Y"))||(yn.toUpperCase().equals("N")))) throw new IOException();
+						inserisci=false;
+					} catch (IOException e) {
+						System.out.print("Errore nell'inserimento della risposta, inseriscila di nuovo: ");
+						}
+				}
+				if (yn.toUpperCase().equals("Y")) inserisciParametri=true;
+			}
 		}
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		federate();
 	}
 }

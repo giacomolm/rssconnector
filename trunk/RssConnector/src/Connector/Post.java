@@ -17,10 +17,11 @@ public class Post {
 	private String enclosure;
 	private String source;
 	private Date pubDate;
+	private ArrayList<Feedback> feedbacks;
 	
 	public Post(long id, String title, String link, String description,
 			String author, ArrayList<String> category, String enclosure,
-			String source, Date pubDate) {
+			String source, Date pubDate, ArrayList<Feedback> feedbacks) {
 		this.id = id;
 		this.title = title;
 		this.link = link;
@@ -30,6 +31,7 @@ public class Post {
 		this.enclosure = enclosure;
 		this.source = source;
 		this.pubDate = pubDate;
+		this.feedbacks = feedbacks;
 	}
 
 	public void setId(long id) {
@@ -104,6 +106,14 @@ public class Post {
 		return pubDate;
 	}
 	
+	public ArrayList<Feedback> getFeedbacks() {
+		return feedbacks;
+	}
+
+	public void setFeedbacks(ArrayList<Feedback> feedbacks) {
+		this.feedbacks = feedbacks;
+	}
+
 	public String printCategoriesToString(){
 		Iterator<String> it=this.category.iterator();
 		String str="";
@@ -118,10 +128,24 @@ public class Post {
 		return str;
 	}
 	
+	public String printFeedbacks(){
+		Iterator<Feedback> it=this.feedbacks.iterator();
+		String str="";
+		boolean primo=true;
+		while(it.hasNext()){
+			if (primo){
+				str+=it.next().getTitle();
+				primo=false;
+			}
+			else str+=", "+it.next().getTitle();
+		}
+		return str;
+	}
+	
 	public String toString(){
 		return "id="+this.id+", title="+this.title+", description="+this.description+
 				", link="+this.link+", autore="+this.author+", category="+printCategoriesToString()+
-				", enclosure="+this.enclosure+", source="+this.source;
+				", enclosure="+this.enclosure+", source="+this.source+", feedbacks="+printFeedbacks();
 	}
 
 }
