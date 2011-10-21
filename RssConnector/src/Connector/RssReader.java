@@ -208,11 +208,22 @@ public class RssReader {
 	    while(iter.hasNext()){
 	    	Item x=iter.next();
 	    	String description="";
-	    	Title titolo=Title.valueOf(x.getTitle().getText());
-	    	Date data=getPubDate(x);
+	    	String feed="";
+	    	Title titolo=Title.AGREE;
 	    	try{
 	    		description=x.getDescription().getText();
 	    	} catch (NullPointerException e){}
+	    	try{
+	    		feed=x.getTitle().getText();
+	    	} catch (NullPointerException e){}
+	    	if (feed != null){
+	    		if ((!feed.isEmpty())||feed.equals("AGREE")||feed.equals("DISAGREE")||
+    				feed.equals("PARTIALLY_AGREE")||feed.equals("DETRACTOR"))
+	    			titolo=Title.valueOf(feed);
+	    		else continue;
+	    	}
+    		else continue;
+	    	Date data=getPubDate(x);
 	    	lista.add(new Feedback(description,titolo,data));
 	    }
 	    return lista;
@@ -247,7 +258,7 @@ public class RssReader {
     	return new ArrayList<Post>();
     }
     ArrayList<Item> items=new ArrayList<Item>(c.getItems());
-    Iterator iter = items.iterator();
+    Iterator<Item> iter = items.iterator();
     ArrayList<Post> res=new ArrayList<Post>();
     while (iter.hasNext()){
     	Item i=(Item)iter.next();
@@ -285,7 +296,7 @@ public class RssReader {
         }
         catch (NullPointerException e){}
         if (!(match(categories)&&timestamp.before(date))) continue;
-    	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date);
+    	Post p=new Post(id, titolo, link, description, "", categories, enclosure, source, date,readFeedbacks(id));
     	res.add(p);
     }
     if (res.size()>0)
