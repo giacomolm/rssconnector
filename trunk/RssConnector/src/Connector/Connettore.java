@@ -132,54 +132,19 @@ public class Connettore{
 			Iterator<Post> it = posts1.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
-				boolean esito = w1.writePost(post);
-				
-				if(esito){
-				
-					//dobbiamo recuperare il feedbackname del post appena scritto
-					long idPost = r2.findFeedbackName(post);
-					
-					if(idPost!=0){
-						ArrayList<Feedback> feedbacks = post.getFeedbacks();
-						if(feedbacks!=null){
-							if(!feedbacks.isEmpty()){
-								Feedback feedback = trust(feedbacks);
-								feedback.setFeedbackname(idPost);
-								w1.writeFeedback(feedback);
-							}
-						}
-					}
-					else res = false;
-				}
+				res = w1.writePost(post,r2);
 			}
-		}	
+		}else res =false;
 		
-		if(posts2!=null){
+		if(posts2!=null&&res!=false){
 			Iterator <Post> it = posts2.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
-				boolean esito = w2.writePost(post);
-				
-				if(esito){
-					//dobbiamo recuperare il feedbackname del post appena scritto
-					long idPost = r1.findFeedbackName(post);
-					if(idPost!=0){
-	
-						ArrayList<Feedback> feedbacks = r2.readFeedbacks(post.getId());
-						if(feedbacks!=null){
-							if(!feedbacks.isEmpty()){
-								Feedback feedback = trust(feedbacks);
-								feedback.setFeedbackname(idPost);
-								w2.writeFeedback(feedback);
-							}
-						}
-					}
-					else res = false;
-				}
+				res = w2.writePost(post,r1);
 			}
-		}
-		return res;
+		}else res=false;
 		
+		return res;
 	}
 
 	public static void main(String[] args) {
@@ -363,5 +328,6 @@ public class Connettore{
 				if (yn.toUpperCase().equals("Y")) inserisciParametri=true;
 			}
 		}
+			System.out.println("Il programma è terminato correttamente");
 	}
 }
