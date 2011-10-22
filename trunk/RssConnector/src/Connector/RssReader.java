@@ -18,60 +18,31 @@ public class RssReader {
     private ArrayList<String> tag;
     private Date timestamp;
     private String bannished; 
-
     
     public RssReader(String boardAddress, String bannished, ArrayList<String> tag, Date timestamp) {
-        this.boardAddress = boardAddress;	//indirizzo bacheca
-        this.bannished = bannished;			//autore bandito
-        if (tag==null)																		//array di tag
-        	this.tag=new ArrayList<String>();
-        else
-        	this.tag = tag;
-        if (timestamp != null)
+    	this(boardAddress,bannished);
+    	if (timestamp != null)
         	this.timestamp = timestamp;
-        else{
-        	SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
-        	Date x=new Date();
-        	try {
-    			x=new Date(sdf.parse("01 01 1970").getTime());
-    		} catch (ParseException e) {}
-    		timestamp=x;
-        }
+        if (tag!=null)																		
+        	this.tag = tag;
     }
     
     public RssReader(String boardAddress, String bannished, Date timestamp) {
-        this.boardAddress = boardAddress;													//indirizzo bacheca
-        this.bannished = bannished;															//autore bandito
-        this.tag=new ArrayList<String>();													//array_Post
+    	this(boardAddress,bannished);
         if (timestamp != null)
         	this.timestamp = timestamp;
-        else{
-        	SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
-        	Date x=new Date();
-        	try {
-    			x=new Date(sdf.parse("01 01 1970").getTime());
-    		} catch (ParseException e) {}
-    		timestamp=x;
-        }
     }
     
     public RssReader(String boardAddress, String bannished, ArrayList<String> tag) {	
-        this.boardAddress = boardAddress;													//indirizzo bacheca
-        this.bannished = bannished;															//autore bandito
-        if (tag==null)																		//array di tag
-        	this.tag=new ArrayList<String>();
-        else
+        this(boardAddress,bannished);
+        if (tag!=null)																		
         	this.tag = tag;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);			//data del 1970
-    	Date x=new Date();
-    	try {
-			x=new Date(sdf.parse("01 01 1970").getTime());
-		} catch (ParseException e) {}
-		timestamp=x;
     }
     
-    public RssReader(String boardAddress, String bannished) {
-        this.boardAddress = boardAddress;   											//Indirizzo Bacheca
+    public RssReader(String boardAddress, String bannished) {   											
+        if (boardAddress.charAt(boardAddress.length()-1)!='/')							//Indirizzo Bacheca
+        	this.boardAddress = boardAddress+"/";
+        else this.boardAddress = boardAddress;
         this.bannished = bannished;														//autore bandito
         tag=new ArrayList<String>();													//Array di tag vuoto
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970

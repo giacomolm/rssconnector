@@ -25,7 +25,9 @@ public class RssWriter {
 	private String author;
 	
 	public RssWriter(String boardAddress, String alias, String author){
-		this.boardAddress = boardAddress;
+		if (boardAddress.charAt(boardAddress.length()-1)!='/')
+        	this.boardAddress = boardAddress+"/";
+        else this.boardAddress = boardAddress;
 		this.alias = alias;
 		this.author = author;
 	}
