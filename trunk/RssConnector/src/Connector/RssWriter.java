@@ -108,7 +108,7 @@ public class RssWriter {
 
 	
 	
-	public boolean writePost(Post post){
+	public boolean writePost(Post post, RssReader dest){
 		boolean response = true;
 		if(checkPost(post)){
 			String urlString = boardAddress+"postboard?";
@@ -151,7 +151,21 @@ public class RssWriter {
 				// TODO Auto-generated catch block
 				response = false;
 			}
-			System.out.println("Post Sending Successful: "+response);
+			if(response){
+					//dobbiamo recuperare il feedbackname del post appena scritto
+					long idPost = dest.findFeedbackName(post);
+					if(idPost!=0){
+	
+						ArrayList<Feedback> feedbacks = post.getFeedbacks();
+						if(feedbacks!=null){
+							if(!feedbacks.isEmpty()){
+								Feedback feedback = Feedback.trust(feedbacks);
+								feedback.setFeedbackname(idPost);
+								writeFeedback(feedback);
+							}
+						}
+					}
+			}
 		}
 		else response = false;
 		return response;
