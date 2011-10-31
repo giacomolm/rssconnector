@@ -188,10 +188,17 @@ public class RssReader {
 	    		feed=x.getTitle().getText();
 	    	} catch (NullPointerException e){}
 	    	if (feed != null){
-	    		if ((!feed.isEmpty())||feed.equals("AGREE")||feed.equals("DISAGREE")||
-    				feed.equals("PARTIALLY_AGREE")||feed.equals("DETRACTOR"))
-	    			titolo=Title.valueOf(feed);
+	    		if (!feed.isEmpty()){
+	    		if (feed.equals("AGREE"))
+	    			titolo=Title.AGREE;
+	    		else if(feed.equals("DISAGREE"))
+	    			titolo=Title.DISAGREE;
+	    		else if(feed.equals("PARTIALLY_AGREE"))
+	    			titolo=Title.PARTIALLY_AGREE;
+	    		else if(feed.equals("DETRACTOR"))
+	    			titolo=Title.DETRACTOR;
 	    		else continue;
+	    		}
 	    	}
     		else continue;
 	    	Date data=getPubDate(x);
