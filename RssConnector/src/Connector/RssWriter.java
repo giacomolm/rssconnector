@@ -77,7 +77,7 @@ public class RssWriter {
 		if(checkFeedback(feedback)){
 			String urlString = boardAddress+"feedbacks?";
 			urlString+="action=NEWCOMMENT&";
-			urlString+="FeedbackName="+idPost+"&";
+			urlString+="FeedbackName="+feedback.getFeedbackname()+"&";
 			urlString+="description="+feedback.getDescription()+"&";
 			urlString+="author="+feedback.getAuthor()+"&";
 			urlString+="title="+feedback.getTitle();
@@ -113,7 +113,7 @@ public class RssWriter {
 	public boolean writePost(Post post, RssReader dest){
 		boolean response = true;
 		if(checkPost(post)){
-			String urlString = boardAddress+"postboard?";
+			String urlString = boardAddress+"postboard/postboard?";
 			urlString+="action=NEWPOST&";
 			urlString+="title="+post.getTitle()+"&";
 			urlString+="description="+post.getDescription()+"&";
