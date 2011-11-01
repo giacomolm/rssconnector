@@ -1,10 +1,15 @@
 package Connector.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.Test;
 
 import Connector.Feedback;
+import Connector.Post;
+import Connector.RssReader;
 import Connector.RssWriter;
 import Connector.Title;
 
@@ -12,24 +17,24 @@ public class WriteFeedbackTestError {
 
 	@Test
 	public void testWriteFeedback(){
-		Feedback testF = new Feedback("desc", null, 130824975);
-		RssWriter testW = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard", "alias", "author");
-		
-		int res;
-
-		if(testW.checkFeedback(testF)) res =1;
-		else res=0;
-		assertEquals(0, res, 0);
-		
-		testF = new Feedback("desc", Title.AGREE, 0);
-		if(testW.checkFeedback(testF)) res =1;
-		else res=0;
-		assertEquals(0, res, 0);
-		
-		testF = new Feedback("desc", null, 0);
-		if(testW.checkFeedback(testF)) res =1;
-		else res=0;
-		assertEquals(0, res, 0);
-		
+		Post p = new Post(0, "titolo", "http://link.it", "description", null, null, null, null, null, null);
+		RssWriter w = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "alias", "author");
+		boolean res = false;
+		RssReader r = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "");
+		w.writePost(p, r);
+		long feedbackname = r.findFeedbackName(p);
+		//abbiamo creato un post che non contiene il campo Title
+		Feedback f = new Feedback("descrizione", null, feedbackname);
+		f.setAuthor("Tester");
+		//chiamiamo il metodo write, anche se l'effettiva scrittura dovrebbe non avvenire
+		w.writeFeedback(f);
+		//verifichiamo se il feedback è stato effettivamente scritto
+		Collection<Feedback> set =  r.readFeedbacks(feedbackname);
+		for(Iterator<Feedback> i = set.iterator(); i.hasNext()&&!res;){
+			Feedback feedback = i.next();
+			if(f.getDescription()!=null && f.getDescription().equals(feedback.getDescription())&&
+			   f.getTitle()!=null && f.getTitle().equals(feedback.getTitle())) res = true;  
+		}
+		assertFalse(res);
 	}
 }

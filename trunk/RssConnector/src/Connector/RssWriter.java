@@ -65,10 +65,16 @@ public class RssWriter {
 	}
 	
 	public boolean checkFeedback(Feedback feedback){
-		if((feedback.getTitle()==null || (feedback.getTitle()).equals(""))||
-		   (feedback.getFeedbackname()==0))
+		if((feedback.getTitle()==null || (feedback.getFeedbackname()==0)))
 			return false;
-		else return true;
+		boolean res = false;
+		if(feedback.getTitle()!=null){
+			Title[] t = Title.values();
+			for(int i=0; i<=t.length&!res; i++){
+				if (t[i].equals(feedback.getTitle())) res = true;
+			}
+		}
+		return res;
 	}
 	
 	public boolean writeFeedback(Feedback feedback){
