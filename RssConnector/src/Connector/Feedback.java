@@ -69,7 +69,7 @@ public class Feedback {
 	
 	@Override
 	public String toString() {
-		return "Descrizione= "+description+", Titolo= "+title.toString()+", Data di pubblicazione= "+pubDate.toString();
+		return "Descrizione= "+description+", Titolo= "+title.toString();
 	}
 	
 	public static Feedback trust(ArrayList<Feedback> feedbacks){
