@@ -37,11 +37,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>autosave_Progetto_Revisionato.mdzip</name>
-			<type>1</type>
-			<location>/home/giacomolm/Scrivania/uml/autosave_Progetto_Revisionato.mdzip</location>
-		</link>
-	</linkedResources>
 </projectDescription>
