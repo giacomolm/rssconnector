@@ -77,11 +77,11 @@ public class RssReader {
 		this.timestamp = timestamp;
 	}
     
-    private boolean match(ArrayList<String> x){
+    private boolean match(ArrayList<String> postsTags){
     	if (tag.isEmpty()){
     		return true;
     	}
-        Iterator<String> it=x.iterator();
+        Iterator<String> it=postsTags.iterator();
         while(it.hasNext()){
         	String comp=it.next();
         	Iterator<String> itTag = tag.iterator();
