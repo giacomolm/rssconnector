@@ -148,4 +148,22 @@ public class Post {
 				", enclosure="+this.enclosure+", source="+this.source+", feedbacks="+printFeedbacks();
 	}
 
+	@Override
+	public boolean equals(Object arg0) {
+
+		if (arg0 instanceof Post){
+			Post confront=(Post)arg0;
+			if (this.getTitle()!=null && confront.getTitle().equals(this.getTitle())&&
+					   this.getLink()!=null && confront.getLink().equals(this.getLink())&&
+					   this.getDescription()!=null && confront.getDescription().equals(this.getDescription()))
+				return true;
+			else
+				return false;
+		}
+		else
+			return super.equals(arg0);
+	}
+	
+	
+
 }

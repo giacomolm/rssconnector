@@ -12,6 +12,7 @@ import postboardIO.RssWriter;
 
 import com.sun.cnpi.rss.parser.RssParserException;
 
+import data.Feedback;
 import data.Post;
  
 
@@ -92,7 +93,6 @@ public class Connettore{
 		return tags;
 	}
 	
-	
 	public boolean federate(){
 		boolean res = true;
 		ArrayList<Post> posts1 = r1.readPosts();
@@ -116,7 +116,56 @@ public class Connettore{
 		
 		return res;
 	}
-
+	
+	public ArrayList<Post> readPosts(int bacheca){
+		if (bacheca>1)
+			return r2.readPosts();
+		else 
+			return r1.readPosts();
+	}
+	public boolean writePost(int bacheca, Post p){
+		if (bacheca>1)
+			return w1.writePost(p, r2);
+		else 
+			return w2.writePost(p, r1);
+	}
+	public ArrayList<Feedback> readFeedbacks(int bacheca, Post p){
+		ArrayList<Post> lista=new ArrayList<Post>();
+		if (bacheca>1)
+			lista= readPosts(2);
+		else 
+			lista= readPosts(1);
+		Iterator<Post> it=lista.iterator();
+		while (it.hasNext()){
+			Post x=it.next();
+			if (p.equals(x))
+				return x.getFeedbacks();
+		}
+		return null;
+	}
+	public boolean writeFeedback(int bacheca, Post p, Feedback f){
+		ArrayList<Post> lista=new ArrayList<Post>();
+		RssWriter w=null;
+		if (bacheca>1){
+			lista= readPosts(2);
+			w=w1;
+		}
+		else {
+			lista= readPosts(1);
+			w=w2;
+		}
+		Iterator<Post> it=lista.iterator();
+		while (it.hasNext()){
+			Post x=it.next();
+			if (p.equals(x)){
+				f.setFeedbackname(x.getId());
+				return w.writeFeedback(f);
+			}
+		}
+		return false;
+		
+	}
+	
 	public static void main(String[] args) {
 		
 		
