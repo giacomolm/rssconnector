@@ -1,4 +1,4 @@
-package Connector.Test;
+package postboardIO.Test;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,6 @@ import postboardIO.RssWriter;
 
 import data.Feedback;
 import data.Post;
-import data.Title;
 
 
 public class WriteFeedbackTestError {

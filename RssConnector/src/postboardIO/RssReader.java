@@ -15,8 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.xml.sax.SAXParseException;
-
 public class RssReader {
 
     private String boardAddress;
@@ -105,7 +103,7 @@ public class RssReader {
     
     private ArrayList <String> getCategories(Item item){
     	ArrayList <String> lista=new ArrayList<String>();
-    	Iterator <Category> it = item.getCategories().iterator();
+    	Iterator<Category> it = item.getCategories().iterator();
     	while (it.hasNext()){
     		lista.add(it.next().getText());
     	}

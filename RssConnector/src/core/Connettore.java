@@ -1,16 +1,10 @@
 package core;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import postboardIO.RssReader;
 import postboardIO.RssWriter;
-
-
-import com.sun.cnpi.rss.parser.RssParserException;
 
 import data.Feedback;
 import data.Post;
@@ -141,7 +135,7 @@ public class Connettore{
 			if (p.equals(x))
 				return x.getFeedbacks();
 		}
-		return null;
+		return new ArrayList<Feedback>();
 	}
 	public boolean writeFeedback(int bacheca, Post p, Feedback f){
 		ArrayList<Post> lista=new ArrayList<Post>();

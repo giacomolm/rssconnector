@@ -7,7 +7,6 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import core.Connettore;
 
 import postboardIO.RssWriter;
 
@@ -19,7 +18,6 @@ public class TrustFeedback {
 
 	@Test
 	public void testTrustFeedback(){
-		int res;
 		Feedback f1 = new Feedback("descrizione feedback 1", Title.AGREE, 130824975);
 		Feedback f2 = new Feedback("descrizione feedback 2", Title.DISAGREE, 130824975);
 		Feedback f3 = new Feedback("descrizione feedback 3", Title.DISAGREE, 130824975);

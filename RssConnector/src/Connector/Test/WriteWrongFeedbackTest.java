@@ -8,9 +8,10 @@ import java.util.Date;
 import org.junit.Test;
 
 import core.Connettore;
+import data.Feedback;
 import data.Post;
 
-public class WritePostTest {
+public class WriteWrongFeedbackTest {
 
 	@Test
 	public void test() {
@@ -20,8 +21,10 @@ public class WritePostTest {
 		int ts = (int)(new Date()).getTime();
 		Post p = new Post(0, "titolo", "http://link.it", "description"+ts, null, null, null, null, null, null);
 		c.writePost(1, p);
-		ArrayList<Post> lista=c.readPosts(1);
-		assertTrue(lista.contains(p));
+		Feedback f = new Feedback("descrizione", null, 0);
+		c.writeFeedback(1, p, f);
+		ArrayList<Feedback> res=c.readFeedbacks(1, p);
+		assertFalse(res.contains(f));
 	}
 
 }

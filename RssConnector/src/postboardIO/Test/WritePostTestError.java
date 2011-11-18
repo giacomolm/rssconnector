@@ -1,9 +1,8 @@
 
-package Connector.Test;
+package postboardIO.Test;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -13,7 +12,6 @@ import postboardIO.RssReader;
 import postboardIO.RssWriter;
 
 import data.Post;
-import Connector.*; 
 
 public class WritePostTestError {
 	

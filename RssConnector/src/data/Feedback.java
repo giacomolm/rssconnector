@@ -1,7 +1,5 @@
 package data;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
 
 public class Feedback {
@@ -70,6 +68,20 @@ public class Feedback {
 	@Override
 	public String toString() {
 		return "Descrizione= "+description+", Titolo= "+title.toString();
+	}
+
+	@Override
+	public boolean equals(Object arg0) {
+		if (arg0 instanceof Feedback){
+			Feedback confront=(Feedback)arg0;
+			if (this.getDescription()!=null && this.getDescription().equals(confront.getDescription())&&
+					   this.getTitle()!=null && this.getTitle().equals(confront.getTitle()))
+				return true;
+			else
+				return false;
+		}
+		else
+			return super.equals(arg0);
 	}
 	
 }

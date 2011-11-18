@@ -2,20 +2,11 @@ package postboardIO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.io.ObjectInputStream.GetField;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 
 import data.Feedback;
@@ -83,7 +74,6 @@ public class RssWriter {
 	
 	public boolean writeFeedback(Feedback feedback){
 		boolean response=true;
-		long idPost = feedback.getFeedbackname();
 		if(checkFeedback(feedback)){
 			String urlString = boardAddress+"feedbacks?";
 			urlString+="action=NEWCOMMENT&";
@@ -131,12 +121,12 @@ public class RssWriter {
 			urlString+="author="+this.author+"&";
 			urlString+="source="+this.alias;
 			if(post.getCategory()!=null){
-				Iterator ic = post.getCategory().iterator();
+				Iterator<String> ic = post.getCategory().iterator();
 				if(ic.hasNext()){
-					String category = (String) ic.next();
+					String category = ic.next();
 					urlString+="&category="+category;
 					while(ic.hasNext()){
-						category = (String) ic.next();
+						category = ic.next();
 						urlString+=","+category;
 					} 
 				}
