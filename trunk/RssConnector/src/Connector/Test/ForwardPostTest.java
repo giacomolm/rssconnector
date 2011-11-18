@@ -14,9 +14,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import Connector.Post;
-import Connector.RssReader;
-import Connector.RssWriter;
+import postboardIO.RssReader;
+import postboardIO.RssWriter;
+
+import data.Post;
+
 
 
 

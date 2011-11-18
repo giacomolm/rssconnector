@@ -8,6 +8,11 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.junit.Test;
+
+import postboardIO.RssReader;
+import postboardIO.RssWriter;
+
+import data.Post;
 import Connector.*; 
 
 public class WritePostTest {
