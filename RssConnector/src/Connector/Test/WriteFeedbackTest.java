@@ -8,11 +8,13 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import Connector.Feedback;
-import Connector.Post;
-import Connector.RssReader;
-import Connector.RssWriter;
-import Connector.Title;
+import postboardIO.RssReader;
+import postboardIO.RssWriter;
+
+import data.Feedback;
+import data.Post;
+import data.Title;
+
 
 public class WriteFeedbackTest {
 	

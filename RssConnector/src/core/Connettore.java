@@ -1,4 +1,4 @@
-package Connector;
+package core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,8 +6,13 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import postboardIO.RssReader;
+import postboardIO.RssWriter;
+
 
 import com.sun.cnpi.rss.parser.RssParserException;
+
+import data.Post;
  
 
 public class Connettore{

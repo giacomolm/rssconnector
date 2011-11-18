@@ -1,4 +1,4 @@
-package Connector;
+package postboardIO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +17,10 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
+import data.Feedback;
+import data.Post;
+import data.Title;
 
 public class RssWriter {
 	

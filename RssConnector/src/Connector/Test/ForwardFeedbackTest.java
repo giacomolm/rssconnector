@@ -14,11 +14,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import Connector.Feedback;
-import Connector.Post;
-import Connector.RssReader;
-import Connector.RssWriter;
-import Connector.Title;
+import postboardIO.RssReader;
+import postboardIO.RssWriter;
+
+import data.Feedback;
+import data.Post;
+import data.Title;
+
 
 public class ForwardFeedbackTest {
 	

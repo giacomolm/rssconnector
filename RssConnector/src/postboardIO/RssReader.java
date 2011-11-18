@@ -1,8 +1,13 @@
-package Connector;
+package postboardIO;
 import com.sun.cnpi.rss.elements.*;
 import com.sun.cnpi.rss.parser.RssParser;
 import com.sun.cnpi.rss.parser.RssParserException;
 import com.sun.cnpi.rss.parser.RssParserFactory;
+
+import data.Feedback;
+import data.Post;
+import data.Title;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

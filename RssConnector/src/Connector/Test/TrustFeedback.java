@@ -3,13 +3,16 @@ package Connector.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import Connector.Connettore;
-import Connector.Feedback;
-import Connector.RssWriter;
-import Connector.Title;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import core.Connettore;
+
+import postboardIO.RssWriter;
+
+import data.Feedback;
+import data.Title;
 
 
 public class TrustFeedback {
