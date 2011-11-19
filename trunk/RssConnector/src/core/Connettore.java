@@ -37,11 +37,11 @@ public class Connettore{
 		this.alias2 = alias2;
 		this.tags = tags;
 		
-		r1 = new RssReader(address1, author2, tags);
-		w1 = new RssWriter(address2, alias2, author1);
+		r1 = new RssReader(address1, author2, tags);//author2
+		w1 = new RssWriter(address2, alias2, author2);
 		
-		r2 = new RssReader(address2, author1,tags);
-		w2 = new RssWriter(address1, alias1, author2);
+		r2 = new RssReader(address2, author1,tags);//author1
+		w2 = new RssWriter(address1, alias1, author1);
 	}	
 	
 	public void setAddress1(String address1) {
@@ -112,10 +112,18 @@ public class Connettore{
 	}
 	
 	public ArrayList<Post> readPosts(int bacheca){
-		if (bacheca>1)
-			return r2.readPosts();
-		else 
-			return r1.readPosts();
+		ArrayList<Post> res=null;
+		if (bacheca>1){
+			r2.reset();
+			res = r2.readPosts();
+			r2.reset();
+		}
+		else {
+			r1.reset();
+			res = r1.readPosts();
+			r1.reset();
+		}
+		return res;
 	}
 	public boolean writePost(int bacheca, Post p){
 		if (bacheca>1)
@@ -125,10 +133,12 @@ public class Connettore{
 	}
 	public ArrayList<Feedback> readFeedbacks(int bacheca, Post p){
 		ArrayList<Post> lista=new ArrayList<Post>();
-		if (bacheca>1)
+		if (bacheca>1){
 			lista= readPosts(2);
-		else 
+		}
+		else {
 			lista= readPosts(1);
+		}
 		Iterator<Post> it=lista.iterator();
 		while (it.hasNext()){
 			Post x=it.next();

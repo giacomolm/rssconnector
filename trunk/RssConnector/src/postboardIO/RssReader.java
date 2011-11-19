@@ -284,5 +284,14 @@ public class RssReader {
     	timestamp=res.get(res.size()-1).getPubDate();
     return res;
     }
+	
+	public void reset(){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH);		//Timestamp del 1970
+    	Date x=new Date();
+    	try {
+			x=new Date(sdf.parse("01 01 1970").getTime());
+		} catch (ParseException e) {}
+    	this.timestamp=x;
+	}
 }
 
