@@ -25,7 +25,7 @@ public class ForwardPostTest {
 		RssWriter w1 = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "alias", "author");
 		RssReader r1 = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard/", "");
 		//Scriviamo sulla bacheca sorgente il post che vogliamo inoltrare
-		w1.writePost(p, r1);
+		w1.writePost(p, r1,true);
 		//Leggiamo dalla bacheca sorgente il post che abbiamo scritto
 		Collection<Post> posts = r1.readPosts();
 		//Prepariamoci per l'inoltro
@@ -37,7 +37,7 @@ public class ForwardPostTest {
 			   p.getLink()!=null && post.getLink().equals(p.getLink())&&
 			   p.getDescription()!=null && post.getDescription().equals(p.getDescription()))
 				//Una volta individuato il post appena scritto lo scriviamo sulla bacheca di destinazione
-				w2.writePost(post, r2);
+				w2.writePost(post, r2,true);
 		}
 		//Verifichiamo se i post presenti nella bacheca di destinazione
 		//includono quelli appena inoltrati

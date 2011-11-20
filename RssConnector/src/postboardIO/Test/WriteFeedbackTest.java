@@ -25,11 +25,11 @@ public class WriteFeedbackTest {
 		RssWriter w = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "alias", "author");
 		boolean res = false;
 		RssReader r = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "");
-		w.writePost(p, r);
+		w.writePost(p, r,true);
 		long feedbackname = r.findFeedbackName(p);
 		Feedback f = new Feedback("descrizione"+ts, Title.AGREE, feedbackname);
 		f.setAuthor("Tester");
-		w.writeFeedback(f);
+		w.writeFeedback(f,true);
 		Collection<Feedback> set =  r.readFeedbacks(feedbackname);
 		for(Iterator<Feedback> i = set.iterator(); i.hasNext()&&!res;){
 			Feedback feedback = i.next();
