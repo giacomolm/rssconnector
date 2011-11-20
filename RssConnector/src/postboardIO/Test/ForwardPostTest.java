@@ -27,7 +27,7 @@ public class ForwardPostTest {
 		//Scriviamo sulla bacheca sorgente il post che vogliamo inoltrare
 		w1.writePost(p, r1,true);
 		//Leggiamo dalla bacheca sorgente il post che abbiamo scritto
-		Collection<Post> posts = r1.readPosts();
+		Collection<Post> posts = r1.readPosts(true);
 		//Prepariamoci per l'inoltro
 		RssWriter w2 = new RssWriter("http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/", "alias", "author");
 		RssReader r2 = new RssReader("http://pc-ericlab11.isti.cnr.it:8080/virtualNoticeBoard/postboard/", "");

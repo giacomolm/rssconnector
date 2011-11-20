@@ -89,8 +89,8 @@ public class Connettore{
 	
 	public boolean federate(){
 		boolean res = true;
-		ArrayList<Post> posts1 = r1.readPosts();
-		ArrayList<Post> posts2 = r2.readPosts();
+		ArrayList<Post> posts1 = r1.readPosts(true);
+		ArrayList<Post> posts2 = r2.readPosts(true);
 		
 		if(posts1!=null){
 			Iterator<Post> it = posts1.iterator();
@@ -114,10 +114,10 @@ public class Connettore{
 	public ArrayList<Post> readPosts(int bacheca){
 		ArrayList<Post> res=null;
 		if (bacheca>1){
-			res = r2.readAllPosts();
+			res = r2.readPosts(false);
 		}
 		else {
-			res = r1.readAllPosts();
+			res = r1.readPosts(false);
 		}
 		return res;
 	}

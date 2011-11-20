@@ -28,7 +28,7 @@ public class WritePostTestError {
 		RssWriter w = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard", "alias", "author");
 		RssReader r = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard/", "");
 		w.writePost(p, r,true);
-		Collection<Post> pc = r.readPosts();
+		Collection<Post> pc = r.readPosts(true);
 		for(Iterator<Post> i = pc.iterator(); i.hasNext()&&!res;){
 			Post post = i.next();
 			if(p.getTitle()!=null && p.getTitle().equals(post.getTitle())&&
