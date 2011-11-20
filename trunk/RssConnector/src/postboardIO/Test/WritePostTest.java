@@ -24,7 +24,7 @@ public class WritePostTest {
 		boolean res=false;
 		RssReader r = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/postboard/", "");
 		w.writePost(p, r,true);
-		Collection<Post> pc = r.readPosts();
+		Collection<Post> pc = r.readPosts(true);
 		for(Iterator<Post> i = pc.iterator(); i.hasNext()&&!res;){
 			Post post = i.next();
 			System.out.println(post.toString());
