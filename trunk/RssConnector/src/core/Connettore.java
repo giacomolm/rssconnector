@@ -38,10 +38,10 @@ public class Connettore{
 		this.tags = tags;
 		
 		r1 = new RssReader(address1, author2, tags);//author2
-		w1 = new RssWriter(address2, alias2, author2);
+		w1 = new RssWriter(address2, alias2, author1);//author2
 		
 		r2 = new RssReader(address2, author1,tags);//author1
-		w2 = new RssWriter(address1, alias1, author1);
+		w2 = new RssWriter(address1, alias1, author2);//author1
 	}	
 	
 	public void setAddress1(String address1) {
@@ -96,7 +96,7 @@ public class Connettore{
 			Iterator<Post> it = posts1.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
-				res = w1.writePost(post,r2);
+				res = w1.writePost(post,r2,true);
 			}
 		}else res =false;
 		
@@ -104,7 +104,7 @@ public class Connettore{
 			Iterator <Post> it = posts2.iterator();
 			while(it.hasNext()){
 				Post post = (Post) it.next();
-				res = w2.writePost(post,r1);
+				res = w2.writePost(post,r1,true);
 			}
 		}else res=false;
 		
@@ -114,22 +114,18 @@ public class Connettore{
 	public ArrayList<Post> readPosts(int bacheca){
 		ArrayList<Post> res=null;
 		if (bacheca>1){
-			r2.reset();
-			res = r2.readPosts();
-			r2.reset();
+			res = r2.readAllPosts();
 		}
 		else {
-			r1.reset();
-			res = r1.readPosts();
-			r1.reset();
+			res = r1.readAllPosts();
 		}
 		return res;
 	}
 	public boolean writePost(int bacheca, Post p){
 		if (bacheca>1)
-			return w1.writePost(p, r2);
+			return w1.writePost(p, r2,false);
 		else 
-			return w2.writePost(p, r1);
+			return w2.writePost(p, r1,false);
 	}
 	public ArrayList<Feedback> readFeedbacks(int bacheca, Post p){
 		ArrayList<Post> lista=new ArrayList<Post>();
@@ -163,7 +159,7 @@ public class Connettore{
 			Post x=it.next();
 			if (p.equals(x)){
 				f.setFeedbackname(x.getId());
-				return w.writeFeedback(f);
+				return w.writeFeedback(f,false);
 			}
 		}
 		return false;

@@ -22,13 +22,13 @@ public class WriteFeedbackTestError {
 		RssWriter w = new RssWriter("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "alias", "author");
 		boolean res = false;
 		RssReader r = new RssReader("http://atlantis.isti.cnr.it:8080/virtualNoticeBoard/", "");
-		w.writePost(p, r);
+		w.writePost(p, r,true);
 		long feedbackname = r.findFeedbackName(p);
 		//abbiamo creato un post che non contiene il campo Title
 		Feedback f = new Feedback("descrizione", null, feedbackname);
 		f.setAuthor("Tester");
 		//chiamiamo il metodo write, anche se l'effettiva scrittura dovrebbe non avvenire
-		w.writeFeedback(f);
+		w.writeFeedback(f,true);
 		//verifichiamo se il feedback è stato effettivamente scritto
 		Collection<Feedback> set =  r.readFeedbacks(feedbackname);
 		for(Iterator<Feedback> i = set.iterator(); i.hasNext()&&!res;){

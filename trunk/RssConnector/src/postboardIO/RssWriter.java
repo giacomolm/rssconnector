@@ -72,14 +72,19 @@ public class RssWriter {
 		return res;
 	}
 	
-	public boolean writeFeedback(Feedback feedback){
+	public boolean writeFeedback(Feedback feedback, boolean advanced){
 		boolean response=true;
 		if(checkFeedback(feedback)){
 			String urlString = boardAddress+"feedbacks?";
 			urlString+="action=NEWCOMMENT&";
 			urlString+="FeedbackName="+feedback.getFeedbackname()+"&";
 			urlString+="description="+feedback.getDescription()+"&";
-			urlString+="author="+feedback.getAuthor()+"&";
+			if (advanced)
+				urlString+="author="+this.author+"&";
+			else if (feedback.getAuthor()!=null)
+				urlString+="author="+feedback.getAuthor()+"&";
+			else 
+				urlString+="author=anonimo&";
 			urlString+="title="+feedback.getTitle();
 			
 			System.out.println("Sending URL "+urlString+" ...");
@@ -110,7 +115,7 @@ public class RssWriter {
 
 	
 	
-	public boolean writePost(Post post, RssReader dest){
+	public boolean writePost(Post post, RssReader dest, boolean advanced){
 		boolean response = true;
 		if(checkPost(post)){
 			String urlString = boardAddress+"postboard/postboard?";
@@ -118,7 +123,12 @@ public class RssWriter {
 			urlString+="title="+post.getTitle()+"&";
 			urlString+="description="+post.getDescription()+"&";
 			urlString+="link="+post.getLink()+"&";
-			urlString+="author="+this.author+"&";
+			if (advanced)
+				urlString+="author="+this.author+"&";
+			else if (post.getAuthor()!=null)
+				urlString+="author="+post.getAuthor()+"&";
+			else 
+				urlString+="author=anonimo&";
 			urlString+="source="+this.alias;
 			if(post.getCategory()!=null){
 				Iterator<String> ic = post.getCategory().iterator();
@@ -163,7 +173,7 @@ public class RssWriter {
 							if(!feedbacks.isEmpty()){
 								Feedback feedback = trust(feedbacks);
 								feedback.setFeedbackname(idPost);
-								writeFeedback(feedback);
+								writeFeedback(feedback,advanced);
 							}
 						}
 					}
