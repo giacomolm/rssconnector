@@ -1,0 +1,1 @@
+Libreria per la federazione di bacheche virtuali basate su RSS
